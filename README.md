@@ -10,9 +10,9 @@ By convention:
 - Agent 'O' always makes the second move
 
 If you set the program to play itself in 'random mode' (i.e. both agents will randomly select the next move from the available cells) then the results are as follows:
-  Win - Agent 'X':  58.4485%
-  Win - Agent 'O':  28.8464%
-  Draw:             12.0751%
+- Win - Agent 'X':  58.4485%
+- Win - Agent 'O':  28.8464%
+- Draw:             12.0751%
   
 These results are the average of 3 runs of 1m games each.  This establishes the approximate baseline probability for each of the 3 outcomes.
 

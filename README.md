@@ -1,7 +1,9 @@
 # tic_tac_toe
 This is a work in progress.
 
-The goal is to figure out how a software process can learn how to resolve a problem space from first principles.
+The goal is to figure out how a software process can learn how to resolve a problem space from first principles.  This was inspired by Google's AlphaZero.
+
+The game 'tic tac toe' is used as an experiment.  Although this has been done many times before, it was chosen because the action space is small enough to be readily understandable at first glance and the necessary compute resources can be provided by a laptop.
 
 The process must self-learn via competing against itself.  No human interaction or pre-programed rules (ideally) are permissable.
 

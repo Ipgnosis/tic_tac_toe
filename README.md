@@ -18,4 +18,4 @@ If you set the program to play itself in 'random mode' (i.e. both agents will ra
   
 These results are the average of 3 runs of 1m games each.  This establishes the approximate baseline probability for each of the 3 outcomes.
 
-The metric for success is that the 'Nought' agent ('O'), must consistently exceed the random win rate for Agent Nought against a human player playing as Agent 'X'.
+The metric for success is that the 'Nought' agent ('O'), must consistently exceed the random win rate (~28.9%) against a human player playing as Agent 'X'.

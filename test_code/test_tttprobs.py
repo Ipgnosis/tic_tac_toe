@@ -1,6 +1,6 @@
 
 import sys
-sys.path.append('tic_tac_toe')
+sys.path.append('tic_tac_toe.test_code')
 
 from classes.calculate_probabilities import TTTProbs
 from libs.print_board import tty_print

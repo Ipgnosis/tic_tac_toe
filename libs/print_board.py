@@ -33,12 +33,14 @@ def print_board(str_board):
 
 
 # takes a string board or a game list as a parameter
-def tty_print(board):
+def tty_print(board = False):
 
     this_board = [" ", " ", " ", " ", " ", " ", " ", " ", " "]
+    start_board = ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
+
 
     if not board:
-        print_board(this_board)
+        print_board(start_board)
     elif type(board[0]) == str:
         print_board(board)
     elif type(board[0]) == int:

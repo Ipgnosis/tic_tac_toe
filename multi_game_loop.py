@@ -1,4 +1,4 @@
-# run a series of games, set by variable 'limit' below
+# run a series of games, set by variable 'limit': see below
 # written by Russell on 4/9/20
 # modified on 5/4/20 to include matplotlib results
 # modified on 5/5/20 to create the game_record dictionary
@@ -22,11 +22,11 @@ from libs.plot_results import results_plot
 start_time = time.time()
 
 # set the number of games to be played
-limit = 10
+limit = 1
 
 # set game file name
 #file_name = 'rand_best_game_record.txt'
-file_name = 'rand_best_game_record.txt'
+file_name = 'master_game_record.txt'
 
 # set the report frequency
 report_interval_percent = 0.1
@@ -167,7 +167,9 @@ for game_count in range(1, limit + 1):
     # flip the result value to the game winner (defaults to 'D')
     game_record["result"] = result[0]
 
+    # output the result in non-automated games
     if mode_x == "human" or mode_o == "human":
+        print("\n")
         tty_print(game_record["game"])
         if game_record["result"] == "D":
             print("This game results in a draw")

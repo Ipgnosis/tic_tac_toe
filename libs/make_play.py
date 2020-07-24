@@ -64,7 +64,12 @@ def human_move(this_board, board_probs):
     open_moves = get_open_cells(this_board)
 
     print("\n")
-    tty_print(this_board)
+    
+    if len(this_board) > 0:
+        tty_print(this_board)
+    else:
+        tty_print()
+
     print("Game probabilities: P(Win) = {}, P(Loss) = {}, P(Draw) = {}".format(
         board_probs[0], board_probs[1], board_probs[2]))
 

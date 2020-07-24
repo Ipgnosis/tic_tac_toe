@@ -5,7 +5,7 @@ The goal is to figure out how a software process can learn how to resolve a prob
 
 The game 'tic tac toe' is used as an experiment.  Although this has been done many times before, it was chosen because the action space is small enough to be readily understandable at first glance and the necessary compute resources can be provided by a laptop.
 
-The process must self-learn via competing against itself.  No human interaction or pre-programed rules (ideally) are permissable.
+The process must self-learn via competing against itself.  No human interaction or pre-programmed rules (ideally) are permissable.
 
 By convention:
 - Agent 'X' always makes the first move

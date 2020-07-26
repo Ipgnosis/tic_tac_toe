@@ -9,7 +9,7 @@ sys.path.append('tic_tac_toe')
 import pathlib
 import time
 
-from classes.ml_base import ML_base
+from classes.ttt_base import TTTBase
 from classes.calculate_probabilities import TTTProbs
 from libs.game_over import win_loss
 from libs.make_play import agent_x, agent_o
@@ -66,7 +66,7 @@ file_path = file_dir / file_name
 print("Game file = ", file_path)
 
 # instantiate ML_base
-game_history = ML_base(file_path)
+game_history = TTTBase(file_path)
 
 # instantiate TTTProbs
 pct_tuple = game_history.outcome_pct()
@@ -105,6 +105,13 @@ for game_count in range(1, limit + 1):
 
         # invoke the agent of the next player
         if next_up == "X":
+
+            # output the game state for the human to see
+            if mode_o == 'human' and mode_x != 'human':
+                tty_print(game_record["game"])
+                print("Game probabilities for agent X: P(Win) = {}, P(Loss) = {}, P(Draw) = {}".format(
+                    game_probs[0], game_probs[1], game_probs[2]))
+
             
             cell = agent_x(game_record["game"], game_history, mode_x, game_probs)
 
@@ -114,6 +121,12 @@ for game_count in range(1, limit + 1):
             game_record["game"].append(cell)
 
         else:
+
+            # output the game state for the human to see
+            if mode_x == 'human' and mode_o != 'human':
+                tty_print(game_record["game"])
+                print("Game probabilities for agent O: P(Win) = {}, P(Loss) = {}, P(Draw) = {}".format(
+                    game_probs[0], game_probs[1], game_probs[2]))
 
             cell = agent_o(game_record["game"], game_history, mode_o, game_probs)
 
@@ -239,10 +252,11 @@ print("Draws = {} or {}%\n".format(str(d_in_9), str(round(d_in_9 / game_count * 
 end_time = time.time()
 print("Game loop took: {} seconds".format(round(end_time - start_time, 2)))
 
-# package up the result set and send to matplotlib
-plot_title = "Results for {} games".format(str(limit))
-subtitle = "Player modes: Agent Cross {} mode; Agent Nought = {} mode.".format(agent_x, agent_o)
-result_set = [agentX_x_axis, agentX_y_axis, agentO_x_axis,
-              agentO_y_axis, draw_x_axis, draw_y_axis]
+# package up the result set and send to matplotlib, assuming game limit > 1
+if limit > 1:
+    plot_title = "Results for {} games".format(str(limit))
+    subtitle = "Player modes: Agent Cross {} mode; Agent Nought = {} mode.".format(agent_x, agent_o)
+    result_set = [agentX_x_axis, agentX_y_axis, agentO_x_axis,
+                agentO_y_axis, draw_x_axis, draw_y_axis]
 
-results_plot(plot_title, mode_x, mode_o, result_set)
+    results_plot(plot_title, mode_x, mode_o, result_set)

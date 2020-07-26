@@ -1,7 +1,7 @@
 
 import pathlib
 
-from ml_base import ML_base
+from ttt_base import TTT_base
 
 
 file_dir = pathlib.Path(
@@ -12,7 +12,7 @@ file_name = 'new_game_record.txt'
 file_path = file_dir / file_name
 
 # instantiate ML_base
-game_history = ML_base(file_path)
+game_history = TTT_base(file_path)
 
 print("Count stored games for:", file_name)
 

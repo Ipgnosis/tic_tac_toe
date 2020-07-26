@@ -57,7 +57,7 @@ def can_win(board, agent):
     return (False, None)
 
 # queries input from the user based on a game state and returns the chosen move
-def human_move(this_board, board_probs):
+def human_move(this_board, player, board_probs):
 
     valid_move = False
 
@@ -70,8 +70,8 @@ def human_move(this_board, board_probs):
     else:
         tty_print()
 
-    print("Game probabilities: P(Win) = {}, P(Loss) = {}, P(Draw) = {}".format(
-        board_probs[0], board_probs[1], board_probs[2]))
+    print("Game probabilities for agent {}: P(Win) = {}, P(Loss) = {}, P(Draw) = {}".format(
+        player, board_probs[0], board_probs[1], board_probs[2]))
 
     while not valid_move:
 
@@ -219,13 +219,20 @@ def agent_x(board, ml_base, mode, curr_probs):
 
     # select random mode
     if mode == 'random':
+
         move = random_move(board)
+
+    # select human interaction
     elif mode == 'human':
-        # select human interaction
-        move = human_move(board, curr_probs)
+
+        move = human_move(board, "X", curr_probs)
+    
+    # select best mode
     elif mode == 'best':
+        
         # use best_move agency to select move choice
         move = best_move(board, "X", ml_base)
+
     else:
         print("agent_x error: invalid move mode")
         move = False
@@ -243,13 +250,21 @@ def agent_o(board, ml_base, mode, curr_probs):
 
     # select random mode
     if mode == 'random':
+
         move = random_move(board)
+
+    # select human interaction
     elif mode == 'human':
+
         # select human interaction
-        move = human_move(board, curr_probs)
+        move = human_move(board, "O", curr_probs)
+
+    # select best mode
     elif mode == 'best':
+
         # use best_move agency to select move choice
         move = best_move(board, "O", ml_base)
+    
     else:
         print("agent_o error: invalid move mode")
         move = False

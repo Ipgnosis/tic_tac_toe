@@ -27,7 +27,8 @@ class TTTProbs:
             self.prior_draw_pct = 0.127051
         else:
             self.prior_draw_pct = draw_pct
-
+        """
+        #### not currently in use ####
         # initialize the weights for the cell types
         # calculated as the number of cells in the win vectors (8 x 3 = 24)
         # divided by the number of vectors affected by each cell of that type
@@ -50,6 +51,7 @@ class TTTProbs:
         self.probable = 2 / 3
         self.likely = 0.999
         self.win = 1
+        """
 
         # set up the win vectors in a tuple of tuples
         self.win_vectors = ((0, 1, 2), (3, 4, 5), (6, 7, 8), (6, 3, 0),
@@ -86,11 +88,13 @@ class TTTProbs:
         # existence of lost_cause_set values in vector_state eliminates
         # that vector as a win candidate
         if player == "O":
-            # note that "X" means 2 cells occupied by X; "x" means 1 cell
+            # note that "X" means 2 cells occupied by X and an empty cell;
+            # "x" means 1 cell occupied and two empty cells
             lost_cause_set = {"D", "X", "x"}
             opponent = "X"
         else:
-            # note that "O" means 2 cells occupied by O; "o" means 1 cell
+            # note that "O" means 2 cells occupied by O and an empty cell; 
+            # "o" means 1 cell occupied and two empty cells
             lost_cause_set = {"D", "O", "o"}
             opponent = "O"
 
@@ -98,7 +102,7 @@ class TTTProbs:
 
         # iterate through the vector states tallying the game state variables
         for vector_state in range(len(self.vector_states)):
-            # if the vector is a lost cause, reduce the win_vectors by 1
+            # if the vector is a lost cause, reduce the possible_win_vectors by 1
             if self.vector_states[vector_state] in lost_cause_set:
                 possible_win_vectors -= 1
 
@@ -110,6 +114,9 @@ class TTTProbs:
             if self.vector_states[vector_state] == player:
                 impending_win_vectors += 1
 
+            # if the vector is in a draw state: either at least one cell occupied by both players
+            # or all empty cells - note that an empty vector is neither a won or lost vector, 
+            # therefore it must be viewed as a draw vector for the purposes of calculating probabilities
             if self.vector_states[vector_state] in draw_state_set:
                 draw_vectors += 1
 
@@ -118,16 +125,24 @@ class TTTProbs:
         print("TTTProbs: get_probs - agent {} - poss_win = {}, pot_loss = {}, imp_win = {}, draw = {}".format(
             player, possible_win_vectors, potential_loss_vectors, impending_win_vectors, draw_vectors))
 
+        # if the player has a win_vector with 2 occupied cells and an empty cell or
+        # created a fork (pending wins on > 1 vectors) opponent can't block
+        if impending_win_vectors >= 1:
+            # player can win on next move
+            p_win = 1
+
         # if the opponent has a fork (impending loss on > 1 vectors)
-        if potential_loss_vectors > 1:
+        elif potential_loss_vectors > 1:
             # player can't win
             p_loss = 1
 
-        # if the player has created a fork (pending wins on > 1 vectors) opponent can't block
-        elif impending_win_vectors >= 1:
-            p_win = 1
+        # there are no win vectors available and no impending wins/losses
+        # which means that a draw is the only possible outcome
+        elif possible_win_vectors == 0:
+            p_draw = 1
 
-        # no impending wins or losses AND possible_win_vectors > 0
+        # no impending wins, losses or draws;
+        # possible_win_vectors > 0
         else:
             p_win = possible_win_vectors / 8
             p_draw = draw_vectors / 8

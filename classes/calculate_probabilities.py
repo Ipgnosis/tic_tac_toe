@@ -27,6 +27,7 @@ class TTTProbs:
             self.prior_draw_pct = 0.127051
         else:
             self.prior_draw_pct = draw_pct
+
         """
         #### not currently in use ####
         # initialize the weights for the cell types
@@ -44,13 +45,6 @@ class TTTProbs:
                              self.edge_val, self.center_val, self.edge_val, self.corner_val,
                              self.edge_val, self.corner_val]
 
-        # initialize a set of probabilities that we can tune later
-        self.impossible = 0
-        self.low = 0.1
-        self.possible = 1 / 3
-        self.probable = 2 / 3
-        self.likely = 0.999
-        self.win = 1
         """
 
         # set up the win vectors in a tuple of tuples
@@ -80,14 +74,16 @@ class TTTProbs:
         # if this is the first play of the game, return the prior win percentages
         if len(game_board) == 0:
             # return the win/loss/draw percentages
-            ########################  note that x_win/o_win are different for probabilities for a given player ##########
             return (self.prior_x_win_pct, self.prior_o_win_pct, self.prior_draw_pct)
 
         # if at least one play has been made, calculate the probs for the game in progress
         else:
 
-            ###########################################################
-            # we are always calculating probabilities for the next player to make a move
+            # we are calculating probabilities for the next player to make a move
+            ####  but are we?  isn't the goal to calculate the odds of winning, given the move that was just made?
+            ####  the original objective was to rate the effectiveness of each move in a game history, such that 
+            ####  the best move algorithm could select the optimal move from a list of historical moves
+            ####  this theory needs to be tested - get the probs of success for different moves from a given starting game state
             # the next player is different from the last player
             players = self.last_player(game_board)
             last_player = opponent = players[0]
@@ -183,7 +179,6 @@ class TTTProbs:
             opponent_one_play = "o"
             one_play = "x"
 
-
         # get the cell chosen in the last move
         last_play = this_game[-1]
         #print("set_vector_states: last_play = ", last_play)
@@ -213,8 +208,7 @@ class TTTProbs:
     # no result is returned
     def reset_vector_states(self):
 
-        # initialize 8 win vector variable states
-
+        # initialize 8 win vector variable states to None
         self.left_file = None
         self.center_file = None
         self.right_file = None
@@ -224,7 +218,7 @@ class TTTProbs:
         self.left_diagonal = None
         self.right_diagonal = None
 
-        print("reset_vector_states: reset")
+        #print("reset_vector_states: reset")
 
     # determine which player moved last
     def last_player(self, this_game):
@@ -232,6 +226,7 @@ class TTTProbs:
         moves_made = len(this_game)
         #print("last_player: moves_made =", moves_made)
 
+        # return a tuple: (last player, next player)
         if moves_made % 2 == 0:
             return ("O", "X")
         else:

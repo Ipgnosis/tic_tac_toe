@@ -144,14 +144,6 @@ def best_move(this_board, agent, ttt_base):
     if block_loss[0]:
         return block_loss[1]
 
-    """
-
-    blocked_vectors = []
-
-    cant_win(this_board, agent)
-
-    """
-
     # TRANSPOSE the current game state into 9 different games and store in a list
     # the returned value is a list of dictionaries that contain the transposed game
     # and the source function, to allow the game to be transposed back

@@ -69,8 +69,11 @@ print("Game file = ", file_path)
 game_history = TTTBase(file_path)
 
 # instantiate TTTProbs
-pct_tuple = game_history.outcome_pct()
-probs_obj = TTTProbs(pct_tuple[0], pct_tuple[1], pct_tuple[2])
+#pct_tuple = game_history.outcome_pct()
+#print("game_loop: game_history %'ages: P(X win) = {}, P(O win) = {}, P(Draw) = {}".format(
+#    pct_tuple[0], pct_tuple[1], pct_tuple[2]))
+#probs_obj = TTTProbs(pct_tuple[0], pct_tuple[1], pct_tuple[2])
+probs_obj = TTTProbs()
 
 new_games_stored = 0
 
@@ -96,22 +99,23 @@ for game_count in range(1, limit + 1):
 
         # decide who is next to play
         next_up = next_player(game_record["game"])
+        #print("game_loop: next_up =", next_up)
 
-        # check that we have already made a move before calculating game probabilities
-        if len(game_record["game"]) > 0:
-            game_probs = probs_obj.get_probs(game_record["game"])
-        else:
-            game_probs = (0, 0, 0)
-
+        # calculate game probabilities
+        game_probs = probs_obj.get_probs(game_record["game"])
+        
         # invoke the agent of the next player
         if next_up == "X":
 
             # output the game state for the human to see
-            if mode_o == 'human' and mode_x != 'human':
-                tty_print(game_record["game"])
-                print("Game probabilities for agent X: P(Win) = {}, P(Loss) = {}, P(Draw) = {}".format(
-                    game_probs[0], game_probs[1], game_probs[2]))
+            if mode_o == 'human' or mode_x == 'human':
+                if len(game_record["game"]) > 0:
+                    tty_print(game_record["game"])
+                else:
+                    tty_print()
 
+                print("game_loop: probabilities for agent X: P(Win) = {}, P(Loss) = {}, P(Draw) = {}".format(
+                    game_probs[0], game_probs[1], game_probs[2]))
             
             cell = agent_x(game_record["game"], game_history, mode_x, game_probs)
 
@@ -123,9 +127,9 @@ for game_count in range(1, limit + 1):
         else:
 
             # output the game state for the human to see
-            if mode_x == 'human' and mode_o != 'human':
+            if mode_x == 'human' or mode_o == 'human':
                 tty_print(game_record["game"])
-                print("Game probabilities for agent O: P(Win) = {}, P(Loss) = {}, P(Draw) = {}".format(
+                print("game_loop: probabilities for agent O: P(Win) = {}, P(Loss) = {}, P(Draw) = {}".format(
                     game_probs[0], game_probs[1], game_probs[2]))
 
             cell = agent_o(game_record["game"], game_history, mode_o, game_probs)

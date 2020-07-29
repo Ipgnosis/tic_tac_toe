@@ -8,6 +8,7 @@ import random
 def next_player(this_game):
 
     moves_made = len(this_game)
+    #print("next_player: moves_made =", moves_made)
 
     if moves_made % 2 == 0 or moves_made == 0:
         return "X"

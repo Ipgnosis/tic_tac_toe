@@ -57,21 +57,11 @@ def can_win(board, agent):
     return (False, None)
 
 # queries input from the user based on a game state and returns the chosen move
-def human_move(this_board, player, board_probs):
+def human_move(this_board, player):
 
     valid_move = False
 
     open_moves = get_open_cells(this_board)
-
-    print("\n")
-    
-    if len(this_board) > 0:
-        tty_print(this_board)
-    else:
-        tty_print()
-
-    print("Game probabilities for agent {}: P(Win) = {}, P(Loss) = {}, P(Draw) = {}".format(
-        player, board_probs[0], board_probs[1], board_probs[2]))
 
     while not valid_move:
 
@@ -126,7 +116,7 @@ def calc_game_bound(this_game, agent, bound):
     return padded_game
 
 # find the best move for this agent, based on prior games in the game_history
-def best_move(this_board, agent, ml_base):
+def best_move(this_board, agent, ttt_base):
     
     candidate_games = []
     lower_bound = 0
@@ -178,7 +168,7 @@ def best_move(this_board, agent, ml_base):
         #print("best_move: bounds_tuple =", bounds_tuple)
 
     # fetch the list of candidate winning games from the game history
-    candidate_games = ml_base.get_games_list(bounds_list)
+    candidate_games = ttt_base.get_games_list(bounds_list)
 
     #print("best_move: candidate_games =", candidate_games)
 
@@ -217,6 +207,8 @@ def best_move(this_board, agent, ml_base):
 # agent cross - this allows each agent to play differently
 def agent_x(board, ml_base, mode, curr_probs):
 
+    #### note that curr_probs not being used, but will be used soon to calculate best move
+
     # select random mode
     if mode == 'random':
 
@@ -225,7 +217,7 @@ def agent_x(board, ml_base, mode, curr_probs):
     # select human interaction
     elif mode == 'human':
 
-        move = human_move(board, "X", curr_probs)
+        move = human_move(board, "X")
     
     # select best mode
     elif mode == 'best':
@@ -248,6 +240,8 @@ def agent_x(board, ml_base, mode, curr_probs):
 # agent nought - this allows each agent to play differently
 def agent_o(board, ml_base, mode, curr_probs):
 
+    #### note that curr_probs not being used, but will be used soon to calculate best move
+
     # select random mode
     if mode == 'random':
 
@@ -257,7 +251,7 @@ def agent_o(board, ml_base, mode, curr_probs):
     elif mode == 'human':
 
         # select human interaction
-        move = human_move(board, "O", curr_probs)
+        move = human_move(board, "O")
 
     # select best mode
     elif mode == 'best':

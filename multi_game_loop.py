@@ -65,7 +65,7 @@ file_path = file_dir / file_name
 
 print("Game file = ", file_path)
 
-# instantiate ML_base
+# instantiate TTTBase - game history
 game_history = TTTBase(file_path)
 
 # instantiate TTTProbs
@@ -240,7 +240,7 @@ print("Games now in game history:", game_history.num_records())
 # need to do this after we get the number of records stored
 game_history.write_file()
 
-# delete the instantiated classes
+# delete the instantiated classes (take out the garbage)
 del game_history
 del probs_obj
 
@@ -256,11 +256,11 @@ print("Total O wins = {} or {}%\n".format(str(total_o_wins), str(round(total_o_w
 
 print("Draws = {} or {}%\n".format(str(d_in_9), str(round(d_in_9 / game_count * 100, 1))))
 
-# stop the timer before we invoke matplotlib
+# stop the run timer before we invoke matplotlib
 end_time = time.time()
 print("Game loop took: {} seconds".format(round(end_time - start_time, 2)))
 
-# package up the result set and send to matplotlib, assuming game limit > 1
+# package up the result set and send to matplotlib, assuming game limit > 1 (no meaningful output)
 if limit > 1:
     plot_title = "Results for {} games".format(str(limit))
     subtitle = "Player modes: Agent Cross {} mode; Agent Nought = {} mode.".format(agent_x, agent_o)

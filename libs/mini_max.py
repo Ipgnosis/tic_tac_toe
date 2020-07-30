@@ -8,7 +8,7 @@
 # p2 = probability of losing; p3 = probability of drawing
 def minimax(probs):
 
-    choice = probs.sort( lambda x: selector)
+    #choice = probs.sort( lambda x: selector)
     
     probs = [
         (0.6, 0.3, 0.1),
@@ -50,10 +50,11 @@ def minimax(probs):
     if p_win > (p_lose + p_draw):
         return p_win
 
-
+"""
     elif p_win < p_lose:
-        resort on p_draw
+        #resort on p_draw
 
 
     elif p_draw > (p_win + p_lose): 
         resort on p_draw
+"""

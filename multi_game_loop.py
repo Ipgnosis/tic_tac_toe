@@ -56,7 +56,7 @@ x_in_5 = x_in_7 = x_in_9 = o_in_6 = o_in_8 = d_in_9 = 0
 X_wins = O_wins = Draws = 0
 error_count = game_count = 0
 
-# set up game_history from ML_base class
+# set up game_history from TTTBase class
 
 file_dir = pathlib.Path(
     "C:\\Users\\Ipgnosis\\Documents\\Github\\Python\\tic_tac_toe\\game_files")
@@ -101,8 +101,8 @@ for game_count in range(1, limit + 1):
         next_up = next_player(game_record["game"])
         #print("game_loop: next_up =", next_up)
 
-        # calculate game probabilities
-        game_probs = probs_obj.get_probs(game_record["game"])
+        # calculate game probabilities that exist prior to the upcoming play
+        game_probs = probs_obj.get_probs(game_record["game"], next_up)
         
         # invoke the agent of the next player
         if next_up == "X":
@@ -239,6 +239,10 @@ print("Games now in game history:", game_history.num_records())
 # write the game_history to file
 # need to do this after we get the number of records stored
 game_history.write_file()
+
+# delete the instantiated classes
+del game_history
+del probs_obj
 
 # proceed with reporting results now game file is closed
 print("X wins in 5 moves = {} or {}%".format(str(x_in_5), str(round(x_in_5 / game_count * 100, 1))))

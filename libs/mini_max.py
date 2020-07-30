@@ -1,5 +1,6 @@
 # a function to calculate the optimum (maximum and minimum) probabilities
 # written by Russell on 7/8
+# work in progress
 
 # the param for minimax is a list of tuples
 # each tuple contains 3 probabilities, each adding up to 1

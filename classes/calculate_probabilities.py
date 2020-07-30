@@ -69,7 +69,7 @@ class TTTProbs:
 
     # calculate the probabilities of a win, loss and draw for a given game state
     # these numbers should add up to 1
-    def get_probs(self, game_board):
+    def get_probs(self, game_board, next_player):
 
         # if this is the first play of the game, return the prior win percentages
         if len(game_board) == 0:
@@ -79,15 +79,26 @@ class TTTProbs:
         # if at least one play has been made, calculate the probs for the game in progress
         else:
 
-            # we are calculating probabilities for the next player to make a move
-            ####  but are we?  isn't the goal to calculate the odds of winning, given the move that was just made?
-            ####  the original objective was to rate the effectiveness of each move in a game history, such that 
-            ####  the best move algorithm could select the optimal move from a list of historical moves
-            ####  this theory needs to be tested - get the probs of success for different moves from a given starting game state
-            # the next player is different from the last player
-            players = self.last_player(game_board)
-            last_player = opponent = players[0]
-            this_player = players[1]
+            # we are calculating probabilities for either
+            #   the move made by the last player
+            # OR
+            #   the next player to make a move
+
+            #players = self.id_players(game_board)
+
+            if next_player == "X":
+                last_player = "O"
+            else:
+                last_player = "X"
+
+            # to calculate the probabilities on for the next move of the current player, probs mode = "ex-ante"; 
+            # to calculate the probabilities for the last move of the last player, probs_mode = "ex_post"
+            if probs_mode == "ex-ante":
+                # set this_player = last_player
+                next_player = players[1]
+            else: # we are in int"ex-post" mode
+                # set next player
+                next_player = players[0]
 
             self.set_vector_states(game_board, last_player)
 
@@ -97,7 +108,7 @@ class TTTProbs:
 
             # existence of lost_cause_set values in vector_state eliminates
             # that vector as a win candidate
-            if this_player == "O":
+            if next_player == "O":
                 # note that "X" means 2 cells occupied by X and an empty cell;
                 # "x" means 1 cell occupied and two empty cells
                 lost_cause_set = {"D", "X", "x"}
@@ -113,11 +124,11 @@ class TTTProbs:
                     possible_win_vectors -= 1
 
                 # if the vector has 2 opponent plays and 1 open cell
-                if self.vector_states[vector_state] == opponent:
+                if self.vector_states[vector_state] == last_player:
                     potential_loss_vectors += 1
 
                 # if the vector has 2 player plays and 1 open cell
-                elif self.vector_states[vector_state] == this_player:
+                elif self.vector_states[vector_state] == next_player:
                     impending_win_vectors += 1
 
                 # if the vector is in a draw state: either at least one cell occupied by both players
@@ -220,8 +231,9 @@ class TTTProbs:
 
         #print("reset_vector_states: reset")
 
-    # determine which player moved last
-    def last_player(self, this_game):
+    # determine which player moved last ahd which will move next
+    #### need this now?
+    def id_players(self, this_game):
 
         moves_made = len(this_game)
         #print("last_player: moves_made =", moves_made)

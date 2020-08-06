@@ -22,11 +22,11 @@ from libs.plot_results import results_plot
 start_time = time.time()
 
 # set the number of games to be played
-limit = 1
+limit = 10
 
 # set game file name
 #file_name = 'rand_best_game_record.txt'
-file_name = 'master_game_record.txt'
+file_name = 'probs_game_record.txt'
 
 # set the report frequency
 report_interval_percent = 0.1
@@ -34,13 +34,13 @@ report_frequency = limit * report_interval_percent
 report_frequency = False
 
 # set the move selection modes for each agent
-#mode_flip = True
-mode_flip = False
+mode_flip = True
+#mode_flip = False
 #mode_x = "random"
 #mode_o = "random"
-mode_x = "human"
+#mode_x = "human"
 #mode_o = "human"
-#mode_x = "best"
+mode_x = "best"
 mode_o = "best"
 
 # matplotlib result set lists
@@ -59,7 +59,7 @@ error_count = game_count = 0
 # set up game_history from TTTBase class
 
 file_dir = pathlib.Path(
-    "C:\\Users\\Ipgnosis\\Documents\\Github\\Python\\tic_tac_toe\\game_files")
+    "C:\\Users\\Ipgnosis\\Documents\\Github\\tic_tac_toe\\game_files")
 
 file_path = file_dir / file_name
 
@@ -92,7 +92,7 @@ if not report_frequency:
 for game_count in range(1, limit + 1):
 
     # declare the game record dictionary
-    game_record = {"result": "D", "game": []}
+    game_record = {"result": "D", "game": [], "probs": []}
 
     # calculate game probabilities that exist prior to the upcoming play
     # as this is the first play of the first game, this will be the cumulative probabilities
@@ -143,6 +143,8 @@ for game_count in range(1, limit + 1):
 
         # calculate game probabilities as a result of the last play
         game_probs = probs_obj.get_probs(game_record["game"])
+
+        game_record["probs"].append((game_probs[1], game_probs[2], game_probs[3]))
 
     # end of single game loop
 

@@ -54,19 +54,6 @@ class TTTProbs:
         # set the vector states for a new game
         self.reset_vector_states()
 
-        # set up a list of the win vector states
-        # note that the list order is aligned with win_vectors tuple
-        # possible values:
-        #   None = no cells occupied
-        #   "D" = at least two cells occupied, one for each player, therefore this vector is a local draw
-        #   "x" = one cell is occupied by player X, so player O cannot win on this vector
-        #   "X" = two cells are occupied by player X, so player O is in danger of losing on this vector
-        #   "o" =  one cell is occupied by player O, so player X cannot win on this vector
-        #   "O" =  two cells are occupied by player O, so player X is in danger of losing on this vector
-        self.vector_states = [self.bottom_rank, self.middle_rank, self.top_rank,
-                              self.left_file, self.center_file, self.right_file,
-                              self.left_diagonal, self.right_diagonal]
-
     # calculate the probabilities of a win, loss and draw for a given game state for the 
     # MOVE that was JUST MADE and the PLAYER who JUST PLAYED - we are evaluating the move relative to
     # the current game state - these numbers should add up to 1
@@ -106,8 +93,9 @@ class TTTProbs:
 
             # iterate through the vector states tallying the game state variables
             for vector_state in range(len(self.vector_states)):
-                # if the vector is a lost cause or a low win probability reduce the possible_win_vectors by 1
+                # if the vector is a lost cause or a low win probability (None)
                 if self.vector_states[vector_state] in lost_cause_set or self.vector_states[vector_state] == None:
+                    # reduce the possible_win_vectors by 1
                     possible_win_vectors -= 1
 
                 # if the vector currently has 2 next_player plays and 1 open cell
@@ -121,9 +109,9 @@ class TTTProbs:
                     draw_vectors += 1
 
             # debugging statements
-            print("TTTProbs.set_vector_states =", self.vector_states)
-            print("TTTProbs: get_probs - agent {} - poss_win = {}, pot_loss = {}, pot_win = {}, draw = {}".format(
-                last_player, possible_win_vectors, potential_loss_vectors, potential_win_vectors, draw_vectors))
+            #print("TTTProbs.set_vector_states =", self.vector_states)
+            #print("TTTProbs: get_probs - agent {} - poss_win = {}, pot_loss = {}, pot_win = {}, draw = {}".format(
+            #    last_player, possible_win_vectors, potential_loss_vectors, potential_win_vectors, draw_vectors))
 
             #### calculate the probabilities ####
             # if the last_player has a win_vector with 2+ occupied cells and an empty cell or
@@ -210,6 +198,19 @@ class TTTProbs:
         self.top_rank = None
         self.left_diagonal = None
         self.right_diagonal = None
+
+        # set up a list of the win vector states
+        # note that the list order is aligned with win_vectors tuple
+        # possible values:
+        #   None = no cells occupied
+        #   "D" = at least two cells occupied, one for each player, therefore this vector is a local draw
+        #   "x" = one cell is occupied by player X, so player O cannot win on this vector
+        #   "X" = two cells are occupied by player X, so player O is in danger of losing on this vector
+        #   "o" =  one cell is occupied by player O, so player X cannot win on this vector
+        #   "O" =  two cells are occupied by player O, so player X is in danger of losing on this vector
+        self.vector_states = [self.bottom_rank, self.middle_rank, self.top_rank,
+                              self.left_file, self.center_file, self.right_file,
+                              self.left_diagonal, self.right_diagonal]
 
         #print("reset_vector_states: reset")
 

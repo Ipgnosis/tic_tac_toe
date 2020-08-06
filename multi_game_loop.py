@@ -94,6 +94,10 @@ for game_count in range(1, limit + 1):
     # declare the game record dictionary
     game_record = {"result": "D", "game": []}
 
+    # calculate game probabilities that exist prior to the upcoming play
+    # as this is the first play of the first game, this will be the cumulative probabilities
+    game_probs = probs_obj.get_probs(game_record["game"])
+
     # run a single game
     while not win_loss(game_record["game"]):
 
@@ -101,45 +105,44 @@ for game_count in range(1, limit + 1):
         next_up = next_player(game_record["game"])
         #print("game_loop: next_up =", next_up)
 
-        # calculate game probabilities that exist prior to the upcoming play
-        game_probs = probs_obj.get_probs(game_record["game"], next_up)
-        
+        # output the game state for a human player to see
+        if mode_o == 'human' or mode_x == 'human':
+
+            if len(game_record["game"]) > 0:
+                tty_print(game_record["game"])
+            else:
+                tty_print()
+            
+            if len(game_record["game"]) == 0:
+                # game probs are from the cumulative probabilities
+                print("game_loop: current game probabilities: P(X win) = {}, P(O win) = {}, P(Draw) = {}".format(
+                    game_probs[0], game_probs[1], game_probs[2]))
+            else: # a game is in progress
+                # game probs are from the player that just moved
+                print("game_loop: player {} probabilities: P(win) = {}, P(loss) = {}, P(Draw) = {}".format(
+                    game_probs[0], game_probs[1], game_probs[2], game_probs[3]))
+
+
         # invoke the agent of the next player
         if next_up == "X":
 
-            # output the game state for the human to see
-            if mode_o == 'human' or mode_x == 'human':
-                if len(game_record["game"]) > 0:
-                    tty_print(game_record["game"])
-                else:
-                    tty_print()
-
-                print("game_loop: probabilities for agent X: P(Win) = {}, P(Loss) = {}, P(Draw) = {}".format(
-                    game_probs[0], game_probs[1], game_probs[2]))
-            
-            cell = agent_x(game_record["game"], game_history, mode_x, game_probs)
+            cell = agent_x(game_record["game"], game_history, mode_x)
 
             #print("agent_x - recommended move:", cell)
 
-            # record the move in the game
-            game_record["game"].append(cell)
-
         else:
 
-            # output the game state for the human to see
-            if mode_x == 'human' or mode_o == 'human':
-                tty_print(game_record["game"])
-                print("game_loop: probabilities for agent O: P(Win) = {}, P(Loss) = {}, P(Draw) = {}".format(
-                    game_probs[0], game_probs[1], game_probs[2]))
-
-            cell = agent_o(game_record["game"], game_history, mode_o, game_probs)
+            cell = agent_o(game_record["game"], game_history, mode_o)
 
             #print("agent_o - recommended move:", cell)
 
-            # record the move in the game
-            game_record["game"].append(cell)
-    
         #print("Game {} state = {}".format(game_count, game_record["game"]))
+
+        # record the move in the game
+        game_record["game"].append(cell)
+
+        # calculate game probabilities as a result of the last play
+        game_probs = probs_obj.get_probs(game_record["game"])
 
     # end of single game loop
 

@@ -67,11 +67,12 @@ class TTTProbs:
                               self.left_file, self.center_file, self.right_file,
                               self.left_diagonal, self.right_diagonal]
 
-    # calculate the probabilities of a win, loss and draw for a given game state
-    # these numbers should add up to 1
-    def get_probs(self, game_board, next_player):
+    # calculate the probabilities of a win, loss and draw for a given game state for the 
+    # MOVE that was JUST MADE and the PLAYER who JUST PLAYED - we are evaluating the move relative to
+    # the current game state - these numbers should add up to 1
+    def get_probs(self, game_board):
 
-        # if this is the first play of the game, return the prior win percentages
+        # if no play has been made in the game so far, return the prior win percentages
         if len(game_board) == 0:
             # return the win/loss/draw percentages
             return (self.prior_x_win_pct, self.prior_o_win_pct, self.prior_draw_pct)
@@ -79,36 +80,22 @@ class TTTProbs:
         # if at least one play has been made, calculate the probs for the game in progress
         else:
 
-            # we are calculating probabilities for either
-            #   the move made by the last player
-            # OR
-            #   the next player to make a move
+            # identify the players for the move just played
+            players = self.id_players(game_board)
+            last_player = players[0]
+            next_player = players[1]
 
-            #players = self.id_players(game_board)
-
-            if next_player == "X":
-                last_player = "O"
-            else:
-                last_player = "X"
-
-            # to calculate the probabilities on for the next move of the current player, probs mode = "ex-ante"; 
-            # to calculate the probabilities for the last move of the last player, probs_mode = "ex_post"
-            if probs_mode == "ex-ante":
-                # set this_player = last_player
-                next_player = players[1]
-            else: # we are in int"ex-post" mode
-                # set next player
-                next_player = players[0]
-
+            # reset the vector states for the last move
+            # note that vector state is preseverved and updated throughout the game until reset
             self.set_vector_states(game_board, last_player)
 
+            # initialize the variables for the current move            
             p_win = p_draw = p_loss = 0
             possible_win_vectors = 8
-            potential_loss_vectors = impending_win_vectors = draw_vectors = 0
+            potential_loss_vectors = potential_win_vectors = draw_vectors = 0
 
-            # existence of lost_cause_set values in vector_state eliminates
-            # that vector as a win candidate
-            if next_player == "O":
+            # existence of 'lost cause' value in a game vector eliminates that vector as a win candidate
+            if last_player == "O":
                 # note that "X" means 2 cells occupied by X and an empty cell;
                 # "x" means 1 cell occupied and two empty cells
                 lost_cause_set = {"D", "X", "x"}
@@ -119,45 +106,39 @@ class TTTProbs:
 
             # iterate through the vector states tallying the game state variables
             for vector_state in range(len(self.vector_states)):
-                # if the vector is a lost cause, reduce the possible_win_vectors by 1
-                if self.vector_states[vector_state] in lost_cause_set:
+                # if the vector is a lost cause or a low win probability reduce the possible_win_vectors by 1
+                if self.vector_states[vector_state] in lost_cause_set or self.vector_states[vector_state] == None:
                     possible_win_vectors -= 1
 
-                # if the vector has 2 opponent plays and 1 open cell
-                if self.vector_states[vector_state] == last_player:
+                # if the vector currently has 2 next_player plays and 1 open cell
+                if self.vector_states[vector_state] == next_player:
                     potential_loss_vectors += 1
-
-                # if the vector has 2 player plays and 1 open cell
-                elif self.vector_states[vector_state] == next_player:
-                    impending_win_vectors += 1
-
-                # if the vector is in a draw state: either at least one cell occupied by both players
-                # or all empty cells - note that an empty vector is neither a won or lost vector, 
-                # therefore it must be viewed as a draw vector for the purposes of calculating probabilities
+                # if the vector NOW has 2 last_player plays and 1 open cell
+                elif self.vector_states[vector_state] == last_player:
+                    potential_win_vectors += 1
+                # if the vector is in a draw state: at least one cell occupied by both players
                 elif self.vector_states[vector_state] == "D":
                     draw_vectors += 1
 
             # debugging statements
-            #print("TTTProbs.set_vector_states =", self.vector_states)
-            #print("TTTProbs: get_probs - agent {} - poss_win = {}, pot_loss = {}, imp_win = {}, draw = {}".format(
-            #    this_player, possible_win_vectors, potential_loss_vectors, impending_win_vectors, draw_vectors))
+            print("TTTProbs.set_vector_states =", self.vector_states)
+            print("TTTProbs: get_probs - agent {} - poss_win = {}, pot_loss = {}, pot_win = {}, draw = {}".format(
+                last_player, possible_win_vectors, potential_loss_vectors, potential_win_vectors, draw_vectors))
 
-            # if the player has a win_vector with 2 occupied cells and an empty cell or
-            # created a fork (impending wins on > 1 vectors) that opponent can't block
-            if impending_win_vectors >= 1:
-                # player can win on next move
+            #### calculate the probabilities ####
+            # if the last_player has a win_vector with 2+ occupied cells and an empty cell or
+            # created a fork (potential wins on > 1 vectors) that opponent can't block
+            if potential_win_vectors > 1:
+                # last_player can win on the move after next
                 p_win = 1
-
-            # if the opponent has a fork (impending loss on > 1 vectors) that player can't block
-            elif potential_loss_vectors > 1:
-                # player can't win
+            # if the next_player has a 1+ win chances on the next play
+            elif potential_loss_vectors >= 1:
+                # last_player can't win
                 p_loss = 1
-
-            # there are no win vectors available and no impending wins/losses
+            # all vectors have at least one play from each player
             # which means that a draw is the only possible outcome
-            elif possible_win_vectors == 0:
+            elif draw_vectors == 8:
                 p_draw = 1
-
             # no impending wins, losses or draws;
             # possible_win_vectors > 0
             else:
@@ -165,21 +146,22 @@ class TTTProbs:
                 p_draw = draw_vectors / 8
                 p_loss = 1 - p_win - p_draw
 
-            # debug check on sum of probabilities
+            # debug warning on sum of probabilities being out of alignment
             sum_of_probs = p_win + p_loss + p_draw
             if sum_of_probs != 1:
                 print("TTTProbs: get_probs ERROR = sum of probs != 1:", sum_of_probs)
 
-            return (p_win, p_loss, p_draw)
+            # return the current probabilities for the last player, based on the last move 
+            return (last_player, p_win, p_loss, p_draw)
 
     # this method takes the game_board and analyzes the last move against the vector_states
-    # and sets 'D', 'X' or 'O' as required - this keeps a running tally of the game state
+    # and sets 'D', 'X', 'x', 'O' or 'o' as required - this keeps a running tally of the game state
     # no result is returned
     def set_vector_states(self, this_game, last_player):
 
-        # note that these probabilities are being calculated based on the last move made
-        # therefore, 'last_player' is NOT the player about to make a move
-        # the opponent is the last player to make a move
+        # note that the probabilities are calculated based on the last move made
+        # therefore, 'last_player' is the player that just made a move
+        # the opponent is the next player to make a move
         # set the variables
         if last_player == "O":
             opponent = "X"

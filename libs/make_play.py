@@ -197,9 +197,7 @@ def best_move(this_board, agent, ttt_base):
         return random_move(this_board)
 
 # agent cross - this allows each agent to play differently
-def agent_x(board, ml_base, mode, curr_probs):
-
-    #### note that curr_probs not being used, but will be used soon to calculate best move
+def agent_x(board, ml_base, mode):
 
     # select random mode
     if mode == 'random':
@@ -230,9 +228,7 @@ def agent_x(board, ml_base, mode, curr_probs):
     return move
 
 # agent nought - this allows each agent to play differently
-def agent_o(board, ml_base, mode, curr_probs):
-
-    #### note that curr_probs not being used, but will be used soon to calculate best move
+def agent_o(board, ml_base, mode):
 
     # select random mode
     if mode == 'random':

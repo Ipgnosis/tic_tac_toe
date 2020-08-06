@@ -175,7 +175,9 @@ def best_move(this_board, agent, ttt_base):
         candidate_moves = {}
 
         ###################################################################################
-        ### this probably needs to be rewritten as it just perpetuates bad play choices ###
+        ### this needs to be rewritten as it just perpetuates bad play choices ###
+        ### use game_history["probs"] to caculate the probability of success ###
+        
         for game in range(len(reoriented_candidates)):
             if reoriented_candidates[game][num_moves] not in candidate_moves:
                 candidate_moves[reoriented_candidates[game][num_moves]] = 1
@@ -197,7 +199,7 @@ def best_move(this_board, agent, ttt_base):
         return random_move(this_board)
 
 # agent cross - this allows each agent to play differently
-def agent_x(board, ml_base, mode):
+def agent_x(board, ttt_base, mode):
 
     # select random mode
     if mode == 'random':
@@ -213,7 +215,7 @@ def agent_x(board, ml_base, mode):
     elif mode == 'best':
         
         # use best_move agency to select move choice
-        move = best_move(board, "X", ml_base)
+        move = best_move(board, "X", ttt_base)
 
     else:
         print("agent_x error: invalid move mode")
@@ -228,7 +230,7 @@ def agent_x(board, ml_base, mode):
     return move
 
 # agent nought - this allows each agent to play differently
-def agent_o(board, ml_base, mode):
+def agent_o(board, ttt_base, mode):
 
     # select random mode
     if mode == 'random':
@@ -245,7 +247,7 @@ def agent_o(board, ml_base, mode):
     elif mode == 'best':
 
         # use best_move agency to select move choice
-        move = best_move(board, "O", ml_base)
+        move = best_move(board, "O", ttt_base)
     
     else:
         print("agent_o error: invalid move mode")

@@ -22,7 +22,7 @@ from libs.plot_results import results_plot
 start_time = time.time()
 
 # set the number of games to be played
-limit = 10
+limit = 100000
 
 # set game file name
 #file_name = 'rand_best_game_record.txt'
@@ -31,7 +31,7 @@ file_name = 'probs_game_record.txt'
 # set the report frequency
 report_interval_percent = 0.1
 report_frequency = limit * report_interval_percent
-report_frequency = False
+#report_frequency = False
 
 # set the move selection modes for each agent
 mode_flip = True

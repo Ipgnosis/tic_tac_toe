@@ -25,13 +25,13 @@ Current Status:
 The game loop (multi_game_loop.py) executes a series of games defined by a game limit variable.
 
 The game loop can be run in 3 different modes for each of the 2 agents (X/O):
-- Random - the agent randomly selects a move from the available spaces (see also 'error avoidance' below)
-- Best - the agent selects the best move from available choices based on an algorithm (see also 'best move algorithm' below)
+- Random - the agent randomly selects a move from the available spaces (see also 'Error avoidance' below)
+- Best - the agent selects the best move from available choices based on an algorithm (see also 'Best move algorithm' below)
 - Human - the agent delegates the play selection to a human interlocutor.
 
 After each move made by the agent, probabilities of win/lose/draw are calculated for the game state as it exists at the completion of that move.
 
-Each game record is saved in a game history file, assuming that the game is unique, i.e. is not a duplicate of a game that has been played before.  Note that 'uniqueness' is evaluated against a transposition algorithm that considers all rotations and reflections of a given game state (see also 'transposition' below).  The game data stored is:
+Each game record is saved in a game history file (see 'game history' below), assuming that the game is unique, i.e. is not a duplicate of a game that has been played before.  Note that 'uniqueness' is evaluated against a transposition algorithm that considers all rotations and reflections of a given game state (see also 'Transposition' below).  The game data stored is:
 - Result - x win, o win, draw
 - Game - a list of the moves made
 - Probs - a list of the outcome probabilities for each corresponding move from the perspective of the agent (X/O) that made the move (P(win), P(loss), P(draw))
@@ -39,8 +39,40 @@ Each game record is saved in a game history file, assuming that the game is uniq
 If the game doesn't require human intervention, there is the option to report progress on the game loop run to the terminal along with an estimate of time remaining in the game loop.  This is currently set to every 10% of the game loop, but that is a variable.
 
 At the end of the game loop execution, the following data is output to the terminal:
-- Score data (X wins, O wins, draws)
+- Score data (X wins, O wins, Draws)
 - Execution time data
-- a matplotlib graph of the game tally throughout the run
+- A matplotlib graph of the game tally throughout the run
 
+Game History:
 
+The game history is handled by the TTTBase class.  Each game record (see above) is stored with a unique index in a dictionary which effectively provides an indexed file, searchable on the game moves.  The game history file is read into memory at the start of the game loop and written (along with new unique games that have been discovered during the loop) to file at the end of the game loop.
+
+Best Move Algorithm:
+
+This is a work in progress.
+
+Current status = 
+Error avoidance: the vector states are searched for a win that can be achieved in the current move or a loss that could be achieved in the next (opponent) move.  If a win can be achieved, or a loss can be blocked, that move is selected.  !!! This is a kluge that will be removed later.  Prior to the calc_probs class was created, the game history was filled with randomly selected moves that missed easy wins or imminent losses and therefore filled the training data with poor choices that were being repeated over and over.  When calc_probs is integratedd into 'best move' the game history will be recreated to remove this poor training data. !!!
+The game history is then searched for matching games (see also 'Transposition' below).  If no matches are found, the next move is random: this is to ensure that the algorithm explores the solution space (i.e. tries everything that hasn't been tried, such that the game history can be expanded to try new moves).  If matches are found, then the most common next move is selected.  The rationale being that this is the move which maximizes the probability of winning.  However, per above, the combination of the questionable game data and the lack of a probabilities function means that this algorithm is weak and often results in the same poor move being made over and over again.
+
+Next steps = integrate the calc_probs method (TTTProbs class) to allow the best next move (rather than the most common move) to be selected.  Once the probabilities have been integrated, more training will be run to tune the probabilities to upgrade/downgrade the base probability estimates based on training outcomes.
+
+Transposition:
+
+In order to minimize the game history search space, an algorithm ensures that any game stored is unique.  Note that the following games are not unique:
+
+ X |   | O          |   | X
+-----------      ----------
+   | X | O          | X |  
+-----------      ----------
+   |   | X        X | O | O
+   
+The transpositions are as follows:
+
+- Rotate 90 degrees right (see above)
+- Rotate 180 degrees
+- Rotate 270 degrees right (90 degrees left)
+- Reflect vertical (flip on the horizonal axis)
+- Reflect horizonal (flip on the vertial axis)
+- Reflect diagonal left to right (flip on the diagonal axis, top left corner to bottom right corner)
+- Reflect diagonal right to left (flip on the diagonal axis, top right corner to bottom left corner) 

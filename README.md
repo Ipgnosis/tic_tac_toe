@@ -1,7 +1,11 @@
 # tic_tac_toe
 This is a work in progress.
 
-The goal is to figure out how a software process can learn how to resolve a problem space from first principles.  This was inspired by Google's AlphaZero.
+Goal: 
+
+To figure out how a software process can learn how to resolve a problem space from first principles. This was inspired by Google's AlphaZero.  However, AlphaZero's decision making appears be opaque, and this (IMHO) doesn't expand our knowlege of the problem space.  This project has to produce a process by which a human can understand the learning and decision process.
+
+Approach: 
 
 The game 'tic tac toe' is used as an experiment.  Although this has been done many times before, it was chosen because the action space is small enough to be readily understandable at first glance and the necessary compute resources can be provided by a laptop.
 
@@ -17,6 +21,8 @@ If you set the program to play itself in 'random mode' (i.e. both agents will ra
 - Draw:             12.0751%
   
 These results are the average of 3 runs of 1m games each.  This establishes the approximate baseline probability for each of the 3 outcomes.  The higher probability of Agent X winning is a result of the first-mover advantage which also results in Agent X potentially having 5 moves (cf. only 4 for Agent O) in a game that is not won before move 9.
+
+Success metric:
 
 The metric for success is that, after training, the 'Nought' agent ('O'), must consistently exceed the random win rate (~28.9%) against a human player playing as Agent 'X'.
 
@@ -51,8 +57,12 @@ Best Move Algorithm:
 
 This is a work in progress.
 
+Ultimate goal:
+
+Implement the concept of 'hindsight experience replay' which allows the software to learn by storing and updating its base of experience based on new experience.  This (IMHO) seems to match the human process of learning and is more sophisticated than merely having a database of optimal moves (calculated algoritmically) for every game state.  This would be one approach to achieving the ultimate goal.  The other, of course, is neural networks.  That may be tackled later.
+
 Current status = 
-Error avoidance: the vector states are searched for a win that can be achieved in the current move or a loss that could be achieved in the next (opponent) move.  If a win can be achieved, or a loss can be blocked, that move is selected.  !!! This is a kluge that will be removed later.  Prior to the calc_probs class was created, the game history was filled with randomly selected moves that missed easy wins or imminent losses and therefore filled the training data with poor choices that were being repeated over and over.  When calc_probs is integratedd into 'best move' the game history will be recreated to remove this poor training data. !!!
+Error avoidance: the vector states are searched for a win that can be achieved in the current move or a loss that could be achieved in the next (opponent) move.  If a win can be achieved, or a loss can be blocked, that move is selected.  !!! This is a kluge that will be removed later. !!! Prior to the calc_probs class being created, the game history was filled with games containing randomly selected moves that missed easy wins or imminent losses.  This filled the training data with poor choices that were being repeated over and over.  When calc_probs is integratedd into 'best move' the game history will be recreated to remove this poor training data.
 The game history is then searched for matching games (see also 'Transposition' below).  If no matches are found, the next move is random: this is to ensure that the algorithm explores the solution space (i.e. tries everything that hasn't been tried, such that the game history can be expanded to try new moves).  If matches are found, then the most common next move is selected.  The rationale being that this is the move which maximizes the probability of winning.  However, per above, the combination of the questionable game data and the lack of a probabilities function means that this algorithm is weak and often results in the same poor move being made over and over again.
 
 Next steps = integrate the calc_probs method (TTTProbs class) to allow the best next move (rather than the most common move) to be selected.  Once the probabilities have been integrated, more training will be run to tune the probabilities to upgrade/downgrade the base probability estimates based on training outcomes.
@@ -69,9 +79,9 @@ In order to minimize the game history search space, an algorithm ensures that an
 
 
    |   | X
-----------
+-----------
    | X |  
-----------
+-----------
  X | O | O
 
 The transpositions are as follows:

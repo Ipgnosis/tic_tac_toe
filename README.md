@@ -62,14 +62,18 @@ Ultimate goal:
 Implement the concept of 'hindsight experience replay' which allows the software to learn by storing and updating its base of experience based on new experience.  This (IMHO) seems to match the human process of learning and is more sophisticated than merely having a database of optimal moves (calculated algoritmically) for every game state.  This would be one approach to achieving the ultimate goal.  The other, of course, is neural networks.  That may be tackled later.
 
 Current status = 
-Error avoidance: the vector states are searched for a win that can be achieved in the current move or a loss that could be achieved in the next (opponent) move.  If a win can be achieved, or a loss can be blocked, that move is selected.  !!! This is a kluge that will be removed later. !!! Prior to the calc_probs class being created, the game history was filled with games containing randomly selected moves that missed easy wins or imminent losses.  This filled the training data with poor choices that were being repeated over and over.  When calc_probs is integratedd into 'best move' the game history will be recreated to remove this poor training data.
-The game history is then searched for matching games (see also 'Transposition' below).  If no matches are found, the next move is random: this is to ensure that the algorithm explores the solution space (i.e. tries everything that hasn't been tried, such that the game history can be expanded to try new moves).  If matches are found, then the most common next move is selected.  The rationale being that this is the move which maximizes the probability of winning.  However, per above, the combination of the questionable game data and the lack of a probabilities function means that this algorithm is weak and often results in the same poor move being made over and over again.
+
+Error avoidance: the vector states are searched for a win that can be achieved in the current move or a loss that could be achieved in the next (opponent) move.  If a win can be achieved, or a loss can be blocked, that move is selected.  !!! This is a kluge that will be removed later. !!! Prior to the calc_probs class being created, the game history was filled with games containing randomly selected moves that missed easy wins or imminent losses.  This filled the training data with poor choices that were being repeated over and over.  When calc_probs is integrated into 'best move' the game history will be recreated to remove this poor training data.
+
+For a given game state, the game history is searched for matching games (see also 'Transposition' below).  If no matches are found, the next move is random: this is to ensure that the algorithm explores the solution space (i.e. tries everything that hasn't been tried, such that the game history can be expanded to try new moves).  If matches are found, then the most common next move is selected.  The rationale is that this is the move which maximizes the probability of winning.  However, per above, the combination of the questionable game data and the lack of a probabilities function means that this algorithm is weak and often results in the same poor move being made over and over again.
 
 Next steps = integrate the calc_probs method (TTTProbs class) to allow the best next move (rather than the most common move) to be selected.  Once the probabilities have been integrated, more training will be run to tune the probabilities to upgrade/downgrade the base probability estimates based on training outcomes.
 
 Transposition:
 
 In order to minimize the game history search space, an algorithm ensures that any game stored is unique.  Note that the following games are not unique:
+
+(Note that this 'ascii art' is not rendering well in the browser, but can be seen clearly in VS Code/IDE of choice)
 
  X |   | O       
 -----------      

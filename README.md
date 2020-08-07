@@ -61,12 +61,19 @@ Transposition:
 
 In order to minimize the game history search space, an algorithm ensures that any game stored is unique.  Note that the following games are not unique:
 
- X |   | O          |   | X
------------      ----------
-   | X | O          | X |  
------------      ----------
-   |   | X        X | O | O
-   
+ X |   | O       
+-----------      
+   | X | O        
+-----------       
+   |   | X        
+
+
+   |   | X
+----------
+   | X |  
+----------
+ X | O | O
+
 The transpositions are as follows:
 
 - Rotate 90 degrees right (see above)

@@ -35,6 +35,8 @@ The game loop can be run in 3 different modes for each of the 2 agents (X/O):
 - Best - the agent selects the best move from available choices based on an algorithm (see also 'Best move algorithm' below)
 - Human - the agent delegates the play selection to a human interlocutor.
 
+When training the agents, running both agents in Best mode means they tend to fixate on a small number of game states, rather than exploring the larger action space.  So it is (currently) better to run in Best-Random mode: which forces the Best agent to have to react to the full range of plays from the Random agent.  However, this creates a problem because one agent gets trained and then when you flip the modes, the other agent is dominated by the first and can't find a way to win.  Therefore enabling 'flip_mode' allows the agents to alternate between Best and Random and thereby gain experience and explore the action space in parallel.
+
 After each move made by the agent, probabilities of win/lose/draw are calculated for the game state as it exists at the completion of that move.
 
 Each game record is saved in a game history file (see 'game history' below), assuming that the game is unique, i.e. is not a duplicate of a game that has been played before.  Note that 'uniqueness' is evaluated against a transposition algorithm that considers all rotations and reflections of a given game state (see also 'Transposition' below).  The game data stored is:
@@ -59,15 +61,15 @@ This is a work in progress.
 
 Ultimate goal:
 
-Implement the concept of 'hindsight experience replay' which allows the software to learn by storing and updating its base of experience based on new experience.  This (IMHO) seems to match the human process of learning and is more sophisticated than merely having a database of optimal moves (calculated algoritmically) for every game state.  This would be one approach to achieving the ultimate goal.  The other, of course, is neural networks.  That may be tackled later.
+Implement the concept of 'hindsight experience replay' which allows the software to learn by storing and updating its base of experience based on new experience.  This (IMHO) seems to match the human process of learning and is more sophisticated than merely having a search tree (the traditional approach) or a database of optimal moves (calculated algoritmically) for every game state.  This would be one approach to achieving the ultimate goal.  The other, of course, is neural networks.  That may be tackled later.
 
 Current status = 
 
 Error avoidance: the vector states are searched for a win that can be achieved in the current move or a loss that could be achieved in the next (opponent) move.  If a win can be achieved, or a loss can be blocked, that move is selected.  !!! This is a kluge that will be removed later. !!! Prior to the calc_probs class being created, the game history was filled with games containing randomly selected moves that missed easy wins or imminent losses.  This filled the training data with poor choices that were being repeated over and over.  When calc_probs is integrated into 'best move' the game history will be recreated to remove this poor training data.
 
-For a given game state, the game history is searched for matching games (see also 'Transposition' below).  If no matches are found, the next move is random: this is to ensure that the algorithm explores the solution space (i.e. tries everything that hasn't been tried, such that the game history can be expanded to try new moves).  If matches are found, then the most common next move is selected.  The rationale is that this is the move which maximizes the probability of winning.  However, per above, the combination of the questionable game data and the lack of a probabilities function means that this algorithm is weak and often results in the same poor move being made over and over again.
+For a given game state, the game history is searched for matching games (see also 'Transposition' below).  If no matches are found, the next move is random: this is to ensure that the algorithm explores the solution space (i.e. tries everything that hasn't been tried, such that the game history can be expanded to try new moves).  If matches are found, then the most common next move is selected.  The rationale for 'most common' being selected is that this is the move which maximizes the probability of winning.  However, per above, the combination of the questionable game data and the lack of a probabilities function means that this algorithm is weak and often results in the same poor move being made over and over again (thus the error avoidance kluge).
 
-Next steps = integrate the calc_probs method (TTTProbs class) to allow the best next move (rather than the most common move) to be selected.  Once the probabilities have been integrated, more training will be run to tune the probabilities to upgrade/downgrade the base probability estimates based on training outcomes.
+Next steps = integrate the calc_probs method (TTTProbs class) to allow the best next move (rather than the most common move) to be selected.  Once the probabilities have been integrated, training will tune the probabilities to upgrade/downgrade the base probability estimates based on training outcomes.  This will (hopefully) result in optimal performance once training is complete.
 
 Transposition:
 

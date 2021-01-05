@@ -120,7 +120,7 @@ class TTTBase:
         else:
             return False
 
-    # find matches for a list of tuples of lower and upper bounded transposed games
+    # find matching games from a list of tuples of lower and upper bounded transposed games
     def get_games_list(self, bounds_list):
 
         candidate_games = []
@@ -131,6 +131,7 @@ class TTTBase:
         # ensure we get the right number of moves after changing the game_index to str
         game_len = len(bounds_list[0][0])
 
+        # iterate through the bounds list
         for game_bound in bounds_list:
             lower_idx = self.game_index(game_bound[0])
             #print('lower_idx:', lower_idx)
@@ -142,7 +143,7 @@ class TTTBase:
             #print('get_games_list: this_game_list -', this_game_list)
             candidate_games.extend(this_game_list)
 
-        #print('get_games_list: candidate_games = ', candidate_games)
+        print('get_games_list: candidate_games = ', candidate_games)
 
         # check to see if any games found: if not, return False
         if not candidate_games:

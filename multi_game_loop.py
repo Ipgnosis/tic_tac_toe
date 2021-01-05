@@ -22,7 +22,7 @@ from libs.plot_results import results_plot
 start_time = time.time()
 
 # set the number of games to be played
-limit = 10
+limit = 1
 
 # set game file name
 #file_name = 'rand_best_game_record.txt'
@@ -32,7 +32,7 @@ file_name = 'probs_game_record.txt'
 report_interval_percent = 0.1
 report_frequency = limit * report_interval_percent
 # this assignment can be commented out and is just a switch to disable reporting
-report_frequency = False
+#report_frequency = False
 
 # mode_flip allows both agents to be trained in a balanced way when a game history is being created
 # if mode flip is disabled, one agent will never get trained because it is being overwhelmed by the other
@@ -42,10 +42,10 @@ mode_flip = False
 # set the move selection modes for each agent
 #mode_x = "random"
 #mode_o = "random"
-#mode_x = "human"
-mode_o = "human"
-mode_x = "best"
-#mode_o = "best"
+mode_x = "human"
+#mode_o = "human"
+#mode_x = "best"
+mode_o = "best"
 
 # matplotlib result set lists
 agentX_x_axis = []

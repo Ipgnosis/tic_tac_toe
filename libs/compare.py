@@ -112,7 +112,7 @@ def reorient_games(transposed_games, winning_games):
     # rh = reflect_horizontal(rh)
     # rv = reflect_vertical(rv)
 
-    # get the length of the original game
+    # get the current length of the original game
     game_len = len(transposed_games[0]["transpose"])
     #print("game_len =", game_len)
 

@@ -124,6 +124,9 @@ def best_move(this_board, agent, ttt_base):
     num_moves = len(this_board)
     bounds_list = []
 
+    #### this is a kluge and needs to be removed when the probability function is working ####
+    #### right now, it is just stopping bad moves from being recorded in the game history ####
+
     # check to see if a quick win can be achieved
     if num_moves >= 4:
         quick_win = can_win(this_board, agent)
@@ -144,13 +147,16 @@ def best_move(this_board, agent, ttt_base):
     if block_loss[0]:
         return block_loss[1]
 
-    # TRANSPOSE the current game state into 9 different games and store in a list
+    #### end of kluge ####
+
+    # TRANSPOSE the current game state into 8 different games and store in a list
     # the returned value is a list of dictionaries that contain the transposed game
     # and the source function, to allow the game to be transposed back
     tg_list = get_transposed_games(this_board)
 
     #print("best_move: tg_list =", tg_list)
 
+    # for each of the 8 transposed versions of the current game in question
     # build a list of lower and upper bound tuples for the tg_list using calc_game_bound
     for tgame in tg_list:
         lower_bound = calc_game_bound(tgame["transpose"], agent, 'L')
@@ -164,19 +170,38 @@ def best_move(this_board, agent, ttt_base):
 
     #print("best_move: candidate_games =", candidate_games)
 
+    # if there is at least one game that matches the current game state
     if candidate_games != False:
 
+        # this is the list of games that match the transposed game list
         # de-transpose the candidate games to get the right cell for the next move
         reoriented_candidates = reorient_games(tg_list, candidate_games)
 
         #print("RO candidates = ", reoriented_candidates)
+        print("best_move: number of candidate games = ", len(reoriented_candidates))
         
-        # build a dict of the frequency of the winning next moves
-        candidate_moves = {}
+        #high_prob_game = ""
+        high_prob_move = 0
+        high_prob_prob = 0.0
 
+        # iterate though the game candidates
+        for game in range(len(reoriented_candidates)):
+        
+            if candidate_games[game]["probs"][num_moves][0] > high_prob_prob:
+                #high_prob_game = candidate_games[game]
+                high_prob_move = candidate_games[game]["game"][num_moves]
+                high_prob_prob = candidate_games[game]["probs"][num_moves][0]
+
+            print("best_move: move {}, new move choice = {}, P(win) = {}".format(num_moves, high_prob_move, high_prob_prob))    
+
+        recommended_move = high_prob_move
+        """
         ###################################################################################
         ### this needs to be rewritten as it just perpetuates bad play choices ###
         ### use game_history["probs"] to caculate the probability of success ###
+
+        # build a dict of the frequency of the winning next moves
+        candidate_moves = {}
         
         for game in range(len(reoriented_candidates)):
             if reoriented_candidates[game][num_moves] not in candidate_moves:
@@ -184,12 +209,13 @@ def best_move(this_board, agent, ttt_base):
             else:
                 candidate_moves[reoriented_candidates[game][num_moves]] += 1
 
-        #print("candidate_moves =", candidate_moves)
+        print("candidate_moves =", candidate_moves)
         
-        # calculate the best move from the candidate_moves dict
+        # the best move is the most frequently made move in the candidate_moves dict
+        # logic = if this is the move that most often works, then this move (probably) can't be countered
         recommended_move = max(candidate_moves, key=candidate_moves.get)
         ####################################################################################
-        
+        """
         #print("best_move: move = ", recommended_move)
 
         return recommended_move

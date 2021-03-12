@@ -3,7 +3,7 @@ This is a work in progress.
 
 Goal: 
 
-To figure out how a software process can learn how to resolve a problem space from first principles. This was inspired by Google's AlphaZero.  However, AlphaZero's decision making appears be opaque, and this (IMHO) doesn't expand our knowlege of the problem space.  This project has to produce a process by which a human can understand the learning and decision process.
+To explore how a software process can learn how to resolve a problem space from first principles. This was inspired by Google's AlphaZero.  However, AlphaZero's decision making appears be opaque, and this (IMHO) doesn't expand our knowlege of the problem space.  This project has to produce a process by which a human can understand the learning and decision process.
 
 Sidebar:
 
@@ -14,19 +14,18 @@ IMHO, humans don't learn games such as Tic Tac Toe, Chess or Go/Paduk/Weiqi by d
 What they actually do is learn enough to start playing the first game, then playing and learning as they go along.  During early game play, humans do not:
 
 1.  Start a game with a proven strategy in mind (e.g. Sicilian Defense, Ruy Lopez, etc.)
-2.  Conduct an exhaustive, breadth first search of all possible moves
+2.  Conduct an exhaustive, breadth first search of all possible moves (note even in Tic Tac Toe, there are 9! or 362,880 possible moves)
 3.  Calculate win/loss probabilities for any given move
 4.  Explore the history of great games played in the past, looking for similarities
   
-The goal of this project is to get the computer to learn Tic Tac Toe as a young human learns: starting with just enough information to play and then learn by experience of play.  The metric of success is the win rate of the trained agent, and if it can surpass:
-1.  The success rate of random play (see below)
-2.  The win rate of a reasonably adept human (i.e. consistenty beat a human)
+The goal of this project is to get the computer to learn Tic Tac Toe as a young human learns: starting with just enough information to play and then learn by experience of play; basing their decisions on their memory of what worked or didn't work in the past.
+
 
 Approach: 
 
-The game 'tic tac toe' is used as an experiment.  Although this has been done many times before, it was chosen because the action space is small enough to be readily understandable at first glance and the necessary compute resources can be provided by a laptop.
+The game 'tic tac toe' is used as an experiment to explore machine learing from a human perspective.  Although TTT has been done many times before, it was chosen because the action space is small enough to be readily understandable at first glance and the necessary compute resources can be provided by a laptop.
 
-The process must self-learn via competing against itself.  No human interaction or pre-programmed rules (ideally) are permissable.
+The process must self-learn via competing against itself.  No human interaction or pre-programmed rules (beyond how to make a move and the definition of win/loss) are permissable.
 
 By convention:
 - Agent 'X' always makes the first move
@@ -39,9 +38,15 @@ If you set the program to play itself in 'random mode' (i.e. both agents will ra
   
 These results are the average of 3 runs of 1m games each.  This establishes the approximate baseline probability for each of the 3 outcomes.  The higher probability of Agent X winning is a result of the first-mover advantage which also results in Agent X potentially having 5 moves (cf. only 4 for Agent O) in a game that is not won before move 9.
 
+
 Success metric:
 
-The metric for success is that, after training, the 'Nought' agent ('O'), must consistently exceed the random win rate (~28.9%) against a human player playing as Agent 'X'.
+The metric for success is that, after training, the win rate of the trained agent exceeds:
+1.  The success rate of random play (see below)
+2.  The win rate of a reasonably adept human (i.e. consistenty beat a human)
+
+For example, the 'Nought' agent ('O'), should consistently exceed the random win rate (~28.9%) against a human player playing as Agent 'X'.
+
 
 Current Status:
 
@@ -68,13 +73,16 @@ At the end of the game loop execution, the following data is output to the termi
 - Execution time data
 - A matplotlib graph of the game tally throughout the run
 
+
 Game History:
 
 The game history is handled by the TTTBase class.  Each game record (see above) is stored with a unique index in a dictionary which effectively provides an indexed file, searchable on the game moves.  The game history file is read into memory at the start of the game loop and written (along with new unique games that have been discovered during the loop) to file at the end of the game loop.
 
+
 Best Move Algorithm:
 
 This is a work in progress.
+
 
 Ultimate goal:
 
@@ -82,11 +90,17 @@ Implement the concept of 'hindsight experience replay' which allows the software
 
 Current status = 
 
-Error avoidance: the vector states are searched for a win that can be achieved in the current move or a loss that could be achieved in the next (opponent) move.  If a win can be achieved, or a loss can be blocked, that move is selected.  !!! This is a kluge that will be removed later. !!! Prior to the calc_probs class being created, the game history was filled with games containing randomly selected moves that missed easy wins or imminent losses.  This filled the training data with poor choices that were being repeated over and over.  When calc_probs is integrated into 'best move' the game history will be recreated to remove this poor training data.
+Error avoidance: the vector states are searched for a win that can be achieved in the current move or a loss that could be achieved in the next (opponent) move.  If a win can be achieved, or a loss can be blocked, that move is selected.  !!! This is a kluge that will be removed later. !!! Prior to the probability calculation code being created, the game history was filled with games containing randomly selected moves that missed easy wins or imminent losses.  This filled the training data with poor choices that were being repeated over and over.  When probability is integrated into 'best move' the game history will (hopefully) avoid storing poor training data.  See more about probability below.
 
-For a given game state, the game history is searched for matching games (see also 'Transposition' below).  If no matches are found, the next move is random: this is to ensure that the algorithm explores the solution space (i.e. tries everything that hasn't been tried, such that the game history can be expanded to try new moves).  If matches are found, then the most common next move is selected.  The rationale for 'most common' being selected is that this is the move which maximizes the probability of winning.  However, per above, the combination of the questionable game data and the lack of a probabilities function means that this algorithm is weak and often results in the same poor move being made over and over again (thus the error avoidance kluge).
+For a given game state, the game history is searched for matching games (see also 'Transposition' below).  If no matches are found, the next move is random: this is to ensure that the algorithm explores the solution space (i.e. tries everything that hasn't been tried, such that new moves can be explored).  If matches are found, then the most common next move is selected.  The rationale for 'most common' being selected is that this is the move which improves the chance of winning.  However, per above, the combination of questionable game data and the lack of a probabilities function means that this algorithm is weak and often results in the same poor move being made over and over again (thus the error avoidance kluge).
 
-Next steps = integrate the calc_probs method (TTTProbs class) to allow the best next move (rather than the most common move) to be selected.  Once the probabilities have been integrated, training will tune the probabilities to upgrade/downgrade the base probability estimates based on training outcomes.  This will (hopefully) result in optimal performance once training is complete.
+Next steps = integrate the probability calculation method (TTTProbs class) to allow the best next move (rather than the most common move) to be selected.  Once the probabilities have been integrated, training will tune the probabilities to upgrade/downgrade the base probability estimates based on training outcomes.  This will (hopefully) result in optimal performance once training is complete.
+
+
+Calculating probability:
+
+In the original problem statement it was asserted that humans do not play, or improve their play, by a brute-force search of all remaining move options and a methodical calculation of the sucess probability of a given move.  What humans actually do is scan the current situation, and make an almost subconscious assessment of risk/reward before selecting the next move most likely to win; if winning is less likely, then they are playing for a draw.  This has been confirmed by Garry Kasparov's book: 'Deep Thinking: Where Machine Intelligence Ends and Human Creativity Begins'. The TTTProbs class was written to attempt to mimic this thought process and does not implement a tree search.
+
 
 Transposition:
 

@@ -23,7 +23,7 @@ The goal of this project is to get the computer to learn Tic Tac Toe as a young 
 
 Approach: 
 
-The game 'tic tac toe' is used as an experiment to explore machine learing from a human perspective.  Although TTT has been done many times before, it was chosen because the action space is small enough to be readily understandable at first glance and the necessary compute resources can be provided by a laptop.
+The game 'tic tac toe' is used as an experiment to explore machine learning from a human perspective.  Although computer TTT has been implemented many times before, it was chosen because the action space is small enough to be readily understandable at first glance and the necessary compute resources can be provided by a laptop.
 
 The process must self-learn via competing against itself.  No human interaction or pre-programmed rules (beyond how to make a move and the definition of win/loss) are permissable.
 
@@ -36,7 +36,7 @@ If you set the program to play itself in 'random mode' (i.e. both agents will ra
 - Win - Agent 'O':              28.8464%
 - Draw - 9 moves, no winner:    12.0751%
   
-These results are the average of 3 runs of 1m games each.  This establishes the approximate baseline probability for each of the 3 outcomes.  The higher probability of Agent X winning is a result of the first-mover advantage which also results in Agent X potentially having 5 moves (cf. only 4 for Agent O) in a game that is not won before move 9.
+These results are the average of 3 runs of 1 million games each.  This establishes the approximate baseline probability for each of the 3 outcomes.  The higher probability of Agent X winning is a result of the first-mover advantage which also results in Agent X potentially having 5 moves (cf. only 4 for Agent O) in a game that is not won before move 9.
 
 
 Success metric:

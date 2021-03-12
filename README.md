@@ -5,6 +5,23 @@ Goal:
 
 To figure out how a software process can learn how to resolve a problem space from first principles. This was inspired by Google's AlphaZero.  However, AlphaZero's decision making appears be opaque, and this (IMHO) doesn't expand our knowlege of the problem space.  This project has to produce a process by which a human can understand the learning and decision process.
 
+Sidebar:
+
+IMHO, humans don't learn games such as Tic Tac Toe, Chess or Go/Paduk/Weiqi by doing any of the following:
+1.  Exhaustively studying all the great games played by past masters
+2.  Exhaustively studying rules, strategies or tactics
+
+What they actually do is learn enough to start playing the first game, then playing and learning as they go along.  During early game play, humans do not:
+
+1.  Start a game with a proven strategy in mind (e.g. Sicilian Defense, Ruy Lopez, etc.)
+2.  Conduct an exhaustive, breadth first search of all possible moves
+3.  Calculate win/loss probabilities for any given move
+4.  Explore the history of great games played in the past, looking for similarities
+  
+The goal of this project is to get the computer to learn Tic Tac Toe as a young human learns: starting with just enough information to play and then learn by experience of play.  The metric of success is the win rate of the trained agent, and if it can surpass:
+1.  The success rate of random play (see below)
+2.  The win rate of a reasonably adept human (i.e. consistenty beat a human)
+
 Approach: 
 
 The game 'tic tac toe' is used as an experiment.  Although this has been done many times before, it was chosen because the action space is small enough to be readily understandable at first glance and the necessary compute resources can be provided by a laptop.
@@ -16,9 +33,9 @@ By convention:
 - Agent 'O' always makes the second move
 
 If you set the program to play itself in 'random mode' (i.e. both agents will randomly select the next move from the available cells) then the results are as follows:
-- Win - Agent 'X':  58.4485%
-- Win - Agent 'O':  28.8464%
-- Draw:             12.0751%
+- Win - Agent 'X':              58.4485%
+- Win - Agent 'O':              28.8464%
+- Draw - 9 moves, no winner:    12.0751%
   
 These results are the average of 3 runs of 1m games each.  This establishes the approximate baseline probability for each of the 3 outcomes.  The higher probability of Agent X winning is a result of the first-mover advantage which also results in Agent X potentially having 5 moves (cf. only 4 for Agent O) in a game that is not won before move 9.
 

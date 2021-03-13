@@ -5,6 +5,8 @@
 import random
 
 # determine which player moves next
+
+
 def next_player(this_game):
 
     moves_made = len(this_game)
@@ -16,6 +18,8 @@ def next_player(this_game):
         return "O"
 
 # get list of open cells
+
+
 def get_open_cells(this_game):
 
     open_cell_list = []
@@ -28,6 +32,8 @@ def get_open_cells(this_game):
     return open_cell_list
 
 # randomly select move on board from open cells
+
+
 def random_move(this_game):
 
     open_cells = get_open_cells(this_game)
@@ -37,3 +43,24 @@ def random_move(this_game):
     #print("random_move: chosen = ", type(chosen), chosen)
 
     return chosen
+
+
+# queries input from the user based on a game state and returns the chosen move
+
+
+def human_move(this_board, player):
+
+    valid_move = False
+
+    open_moves = get_open_cells(this_board)
+
+    while not valid_move:
+
+        move = int(input("Your move: enter an int 0:8 in an empty space - "))
+
+        if move not in open_moves:
+            print("Invalid move...choose any of the following:", open_moves)
+        else:
+            valid_move = True
+
+    return move

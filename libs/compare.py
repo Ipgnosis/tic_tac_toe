@@ -20,6 +20,8 @@ from libs.print_board import tty_print
 # end of test data
 
 # check for duplicate games in the game_record file
+
+
 def duplicate_game(board, game_class):
 
     # param1 is a game board submitted to the tests below
@@ -34,7 +36,7 @@ def duplicate_game(board, game_class):
     #print("r90", rotate90(board))
     if game_class.find_match(rotate90(board)):
         return True
-    
+
     # check rotate180
     #print("r180", rotate180(board))
     if game_class.find_match(rotate180(board)):
@@ -71,9 +73,11 @@ def duplicate_game(board, game_class):
 
 # compile a list of games transposed from the current game
 # this is required because we don't know what orientation prior games were stored in
+
+
 def get_transposed_games(this_board):
 
-    # create a set of dicts containing the transposed game and the name of the 
+    # create a set of dicts containing the transposed game and the name of the
     # function to reverse out the transposition later
     tx1 = rotate90(this_board)
     tx2 = rotate180(this_board)
@@ -94,12 +98,14 @@ def get_transposed_games(this_board):
 
     # compile a list of the dicts to be returned
     dup_games_list = [orig_game, r90, r180, r270, rdl, rdr, rh, rv]
-    
+
     #print("get_transposed_games: dup_games_list -", dup_games_list)
 
     return dup_games_list
 
 # convert the transposed games back to the original orientation
+
+
 def reorient_games(transposed_games, winning_games):
 
     # transpose back
@@ -136,8 +142,9 @@ def reorient_games(transposed_games, winning_games):
             if tx_game["transpose"] == win_game["game"][: game_len]:
                 if tx_game["reverse"] == "original":
                     retransposed_games.append(win_game["game"])
-                else:    
-                    win_game_retx = getattr(sys.modules[__name__], tx_game["reverse"])(win_game["game"])
+                else:
+                    win_game_retx = getattr(
+                        sys.modules[__name__], tx_game["reverse"])(win_game["game"])
                     retransposed_games.append(win_game_retx)
 
     return retransposed_games

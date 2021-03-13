@@ -1,20 +1,21 @@
 # class definition for TTTBase
 # this is a class that stores the game history as a file of dict, in json format
 # written by Russell on 5/9/20
+# modified on 3/6/21 by Russell to fix new file ('file does not exist') bug
 
-import pathlib
 import json
+
 
 class TTTBase:
 
-# data_records = [
-#    {"result": "X", "game": [0, 6, 1, 4, 2]},
-#    {"result": "O", "game": [8, 7, 0, 1, 6, 4]},
-#    {"result": "X", "game": [0, 2, 8, 4, 6, 1, 3]},
-#    {"result": "O", "game": [6, 1, 3, 0, 2, 4, 8, 7]},
-#    {"result": "X", "game": [3, 0, 4, 1, 2, 8, 6, 7, 5]},
-#    {"result": "D", "game": [1, 8, 7, 4, 0, 2, 5, 3, 6]}
-# ]
+    # data_records = [
+    #    {"result": "X", "game": [0, 6, 1, 4, 2]},
+    #    {"result": "O", "game": [8, 7, 0, 1, 6, 4]},
+    #    {"result": "X", "game": [0, 2, 8, 4, 6, 1, 3]},
+    #    {"result": "O", "game": [6, 1, 3, 0, 2, 4, 8, 7]},
+    #    {"result": "X", "game": [3, 0, 4, 1, 2, 8, 6, 7, 5]},
+    #    {"result": "D", "game": [1, 8, 7, 4, 0, 2, 5, 3, 6]}
+    # ]
 
     # initialize the class instance with the file name, populate file_path
     def __init__(self, file_path):
@@ -26,7 +27,7 @@ class TTTBase:
         if self.file_path.exists():
             self.read_file()
         else:
-            print('__init__ : file missing')    
+            print('__init__ : new file created')
 
     # return the number of records in the game_struct
     def num_records(self):
@@ -127,7 +128,7 @@ class TTTBase:
 
         #print('get_games_list: bounds_list =', bounds_list)
         #print('get_games_list: type(bounds_list) =', type(bounds_list))
-        
+
         # ensure we get the right number of moves after changing the game_index to str
         game_len = len(bounds_list[0][0])
 
@@ -139,7 +140,8 @@ class TTTBase:
             upper_idx = self.game_index(game_bound[1])
             #print('upper_index:', upper_idx)
             #print('upper_index: type', type(upper_idx))
-            this_game_list = list(val for key, val in self.game_struct.items() if key >= lower_idx and key <= upper_idx and len(key) == game_len)
+            this_game_list = list(val for key, val in self.game_struct.items(
+            ) if key >= lower_idx and key <= upper_idx and len(key) == game_len)
             #print('get_games_list: this_game_list -', this_game_list)
             candidate_games.extend(this_game_list)
 
@@ -150,7 +152,7 @@ class TTTBase:
             return False
         else:
             return candidate_games
-    
+
     # read file data into data_struct
     def read_file(self):
         with open(self.file_path, 'r') as f:

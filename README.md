@@ -116,8 +116,6 @@ In the original problem statement it was asserted that humans do not play, or im
 
 In order to minimize the game history search space, an algorithm ensures that any game stored is unique.  Note that the following games are not unique:
 
-(Note that this 'ascii art' is not rendering well in the browser, but can be seen clearly in VS Code/IDE of choice)
-
 <table>
 <tr>
 <td>X</td>

@@ -120,7 +120,7 @@ In the original problem statement it was asserted that humans do not play, or im
 
 ## Transposition:
 
-In order to minimize the game history search space, an algorithm ensures that any game stored is unique.  Note that the following games are not unique:
+In order to minimize the game history search space, an algorithm ensures that any game stored is unique.  Note that the following games are transpositionally identical:
 
 <table>
 <tr>

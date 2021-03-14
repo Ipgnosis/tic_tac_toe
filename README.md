@@ -109,7 +109,8 @@ Next steps = integrate the probability calculation method (TTTProbs class) to al
 ## Calculating probability:
 
 In the original problem statement it was asserted that humans do not play, or improve their play, by a brute-force search of all remaining move options and a methodical calculation of the sucess probability of a given move.  What humans actually do is scan the current situation, and make an almost subconscious assessment of risk/reward before selecting the next move most likely to win; if winning is less likely, then they are playing for a draw.  This has been confirmed by Garry Kasparov's book: 'Deep Thinking: Where Machine Intelligence Ends and Human Creativity Begins'. The TTTProbs class was written to attempt to mimic this thought process and does not implement a tree search.
-[] Say more on this.
+
+ [ ] Say more on this.
 
 
 ## Transposition:

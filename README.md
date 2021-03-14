@@ -86,9 +86,9 @@ Per above on the goal of the project to mimic human learning, therefore the algo
 1.  Assess the board for potential wins (two moves in a vector with an open space): if one exists, make that play to take the win.
 2.  Assess the board for impending losses (two opponent's moves in a vector with an open space): if one exists, take it to prevent the loss.
 3.  Assess the board for recognizable patterns, based on memory of past games.  Optimize move selection as follows:
-    -   Choose the move most likely to win.  If there are several moves with equal weight, choose the move least likely to lose.
+    -   Choose the move most likely to win (probability estimate).  If there are several moves with equal weight, choose the move least likely to lose.
     -   If losing seems more likely, chose the move most likely to draw.
-4.  Record the expectation of a win / loss / draw for that move by estimating the probability of each.
+4.  Record the expectation of a win / loss / draw for that move by *estimating* the probability of each (see Calculating Probability below)
 5.  At the end of the game, store the recollection of that game.
 6.  For each of the outcomes (win/loss/draw) adjust the probabilities (expectation) of those results for all relevant stored games.  This is done for the each of the patterns followed, up to the point that the game deviated from the pattern.  The degree of upgrade/downgrade is a variable that will be tuned to produce an optimal result.
 
@@ -108,7 +108,7 @@ Next steps = integrate the probability calculation method (TTTProbs class) to al
 
 ## Calculating probability:
 
-In the original problem statement it was asserted that humans do not play, or improve their play, by a brute-force search of all remaining move options and a methodical calculation of the sucess probability of a given move.  What humans actually do is scan the current situation, and make an almost subconscious assessment of risk/reward before selecting the next move most likely to win; if winning is less likely, then they are playing for a draw.  This has been confirmed by Garry Kasparov's book: 'Deep Thinking: Where Machine Intelligence Ends and Human Creativity Begins'. The TTTProbs class was written to attempt to mimic this thought process and does not implement a tree search.
+In the original problem statement it was asserted that humans do not play, or improve their play, by a brute-force search of all remaining move options and a methodical calculation of the sucess probability of a given move.  What humans actually do is scan the current situation, and make an almost subconscious assessment of risk/reward before selecting the next move most likely to win; if winning is less likely, then they are playing for a draw.  This has been confirmed by Garry Kasparov's book: 'Deep Thinking: Where Machine Intelligence Ends and Human Creativity Begins'. The TTTProbs class was written to attempt to mimic this thought process and does not implement a Monte Carlo Tree Search.
 
  [ ] Say more on this.
 

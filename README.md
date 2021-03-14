@@ -118,20 +118,41 @@ In order to minimize the game history search space, an algorithm ensures that an
 
 (Note that this 'ascii art' is not rendering well in the browser, but can be seen clearly in VS Code/IDE of choice)
 
+<table>
+<tr>
+<td>X</td>
+<td> </td>
+<td>O</td>
+</tr>
+<tr>
+<td> </td>
+<td>X</td>
+<td>O</td>
+</tr>
+<tr>
+<td> </td>
+<td> </td>
+<td>X</td>
+</tr>
+</table>
 
- X |   | O       
------------      
-   | X | O        
------------       
-   |   | X        
-
-
-   |   | X
------------
-   | X |  
------------
- X | O | O
-
+<table>
+<tr>
+<td> </td>
+<td> </td>
+<td>X</td>
+</tr>
+<tr>
+<td> </td>
+<td>X</td>
+<td> </td>
+</tr>
+<tr>
+<td>X</td>
+<td>O</td>
+<td>O</td>
+</tr>
+</table>
 
 The transpositions are as follows:
 

@@ -3,7 +3,7 @@ This is a work in progress.
 
 ## Goal: 
 
-To explore how a software process can learn how to resolve a problem space from first principles. This was inspired by [Google's AlphaZero](https://deepmind.com/blog/article/alphazero-shedding-new-light-grand-games-chess-shogi-and-go).  However, AlphaZero's learning process is opaque, and this doesn't expand **my** knowlege of how software can learn the problem space.  This project iterates towards a process by which a human * *(specifically me)* * can understand the computer learning process.
+To explore how a software process can learn how to resolve a problem space from first principles. This was inspired by [Google's AlphaZero](https://deepmind.com/blog/article/alphazero-shedding-new-light-grand-games-chess-shogi-and-go).  However, AlphaZero's learning process is opaque, and this doesn't expand **my** knowlege of how software can learn the problem space.  This project iterates towards a process by which a human * */(specifically me/)* * can understand the computer learning process.
 
 ### Sidebar:
 
@@ -62,7 +62,7 @@ When training the agents, running both agents in Best mode means they tend to fi
 After each move made by the agent, probabilities of win/lose/draw are calculated for the game state as it exists at the completion of that move.
 
 Each game record is saved in a game history file (see 'game history' below), assuming that the game is unique, i.e. is not a duplicate of a game that has been played before.  Note that 'uniqueness' is evaluated against a transposition algorithm that considers all rotations and reflections of a given game state (see also 'Transposition' below).  The game data stored is:
-- Result - x win, o win, draw
+- Result - X win, O win, Draw
 - Game - a list of the moves made
 - Probs - a list of the outcome probabilities for each corresponding move from the perspective of the agent (X/O) that made the move (P(win), P(loss), P(draw))
 
@@ -119,19 +119,19 @@ In order to minimize the game history search space, an algorithm ensures that an
 (Note that this 'ascii art' is not rendering well in the browser, but can be seen clearly in VS Code/IDE of choice)
 
 
- X |   | O       
------------      
-   | X | O        
------------       
-   |   | X        
+ X /|   /| O       
+/-----------      
+   /| X /| O        
+/-----------       
+   /|   /| X        
 
 
 
-   |   | X
------------
-   | X |  
------------
- X | O | O
+   /|   /| X
+/-----------
+   /| X /|  
+/-----------
+ X /| O /| O
 
 
 The transpositions are as follows:

@@ -99,11 +99,16 @@ Implement the concept of 'hindsight experience replay' which allows the software
 
 ## Current status: 
 
-Error avoidance: the vector states are searched for a win that can be achieved in the current move or a loss that could be achieved in the next (opponent) move.  If a win can be achieved, or a loss can be blocked, that move is selected.  !!! This is a kluge that will be removed later. !!! Prior to the probability calculation code being created, the game history was filled with games containing randomly selected moves that missed easy wins or imminent losses.  This filled the training data with poor choices that were being repeated over and over.  When probability is integrated into 'best move' the game history will (hopefully) avoid storing poor training data.  See more about probability below.
-
 For a given game state, the game history is searched for matching games (see also 'Transposition' below).  If no matches are found, the next move is random: this is to ensure that the algorithm explores the solution space (i.e. tries everything that hasn't been tried, such that new moves can be explored).  If matches are found, then the most common next move is selected.  The rationale for 'most common' being selected is that this is the move which improves the chance of winning.  However, per above, the combination of questionable game data and the lack of a probabilities function means that this algorithm is weak and often results in the same poor move being made over and over again (thus the error avoidance kluge).
 
-Next steps = integrate the probability calculation method (TTTProbs class) to allow the best next move (rather than the most common move) to be selected.  Once the probabilities have been integrated, training will tune the probabilities to upgrade/downgrade the base probability estimates based on training outcomes.  This will (hopefully) result in optimal performance once training is complete.
+### Error avoidance: 
+
+The vector states are searched for a win that can be achieved in the current move or a loss that could be achieved in the next (opponent) move.  If a win can be achieved, or a loss can be blocked, that move is selected.
+Prior to the probability calculation code being created, the game history was filled with games containing randomly selected moves that missed easy wins or imminent losses.  This filled the training data with poor choices that were being repeated over and over.  When probability is integrated into 'best move' the game history will (hopefully) avoid storing poor training data.  See more about probability below.
+
+### Next steps
+
+Integrate the probability calculation method (TTTProbs class) to allow the best next move (rather than the most common move) to be selected.  Once the probabilities have been integrated, training will tune the probabilities to upgrade/downgrade the base probability estimates based on training outcomes.  This will (hopefully) result in optimal performance once training is complete.
 
 
 ## Calculating probability:

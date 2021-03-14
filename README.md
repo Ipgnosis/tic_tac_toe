@@ -1,7 +1,7 @@
 # tic_tac_toe
 This is a work in progress.
 
-# Goal: 
+## Goal: 
 
 To explore how a software process can learn how to resolve a problem space from first principles. This was inspired by [Google's AlphaZero](https://deepmind.com/blog/article/alphazero-shedding-new-light-grand-games-chess-shogi-and-go).  However, AlphaZero's learning process is opaque, and this doesn't expand **my** knowlege of how software can learn the problem space.  This project iterates towards a process by which a human * *(specifically me)* * can understand the computer learning process.
 
@@ -86,8 +86,8 @@ Per above on the goal of the project to mimic human learning, therefore the algo
 1.  Assess the board for potential wins (two moves in a vector with an open space): if one exists, make that play to take the win.
 2.  Assess the board for impending losses (two opponent's moves in a vector with an open space): if one exists, take it to prevent the loss.
 3.  Assess the board for recognizable patterns, based on memory of past games.  Optimize move selection as follows:
--   Choose the move most likely to win.  If there are several moves with equal weight, choose the move least likely to lose.
--   If losing seems more likely, chose the move most likely to draw.
+    -   Choose the move most likely to win.  If there are several moves with equal weight, choose the move least likely to lose.
+    -   If losing seems more likely, chose the move most likely to draw.
 4.  Record the expectation of a win / loss / draw for that move by estimating the probability of each.
 5.  At the end of the game, store the recollection of that game.
 6.  For each of the outcomes (win/loss/draw) adjust the probabilities (expectation) of those results for all relevant stored games.  This is done for the each of the patterns followed, up to the point that the game deviated from the pattern.  The degree of upgrade/downgrade is a variable that will be tuned to produce an optimal result.
@@ -97,7 +97,7 @@ Per above on the goal of the project to mimic human learning, therefore the algo
 
 Implement the concept of 'hindsight experience replay' which allows the software to learn by storing and updating its base of experience based on new experience.  This (IMHO) seems to match the human process of learning and is more sophisticated than merely having a search tree (the traditional approach) or a database of optimal moves (calculated algoritmically) for every game state.  This would be one approach to achieving the ultimate goal.  The other, of course, is neural networks.  That may be tackled later.
 
-## Current status = 
+## Current status: 
 
 Error avoidance: the vector states are searched for a win that can be achieved in the current move or a loss that could be achieved in the next (opponent) move.  If a win can be achieved, or a loss can be blocked, that move is selected.  !!! This is a kluge that will be removed later. !!! Prior to the probability calculation code being created, the game history was filled with games containing randomly selected moves that missed easy wins or imminent losses.  This filled the training data with poor choices that were being repeated over and over.  When probability is integrated into 'best move' the game history will (hopefully) avoid storing poor training data.  See more about probability below.
 
@@ -109,7 +109,7 @@ Next steps = integrate the probability calculation method (TTTProbs class) to al
 ## Calculating probability:
 
 In the original problem statement it was asserted that humans do not play, or improve their play, by a brute-force search of all remaining move options and a methodical calculation of the sucess probability of a given move.  What humans actually do is scan the current situation, and make an almost subconscious assessment of risk/reward before selecting the next move most likely to win; if winning is less likely, then they are playing for a draw.  This has been confirmed by Garry Kasparov's book: 'Deep Thinking: Where Machine Intelligence Ends and Human Creativity Begins'. The TTTProbs class was written to attempt to mimic this thought process and does not implement a tree search.
- [ ] Say more on this.
+ [] Say more on this.
 
 
 ## Transposition:
@@ -118,21 +118,21 @@ In order to minimize the game history search space, an algorithm ensures that an
 
 (Note that this 'ascii art' is not rendering well in the browser, but can be seen clearly in VS Code/IDE of choice)
 
-"""
+
  X |   | O       
 -----------      
    | X | O        
 -----------       
    |   | X        
-"""
 
-"""
+
+
    |   | X
 -----------
    | X |  
 -----------
  X | O | O
-"""
+
 
 The transpositions are as follows:
 

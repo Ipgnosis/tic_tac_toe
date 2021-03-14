@@ -11,7 +11,7 @@ Humans don't learn games such as Tic Tac Toe, Chess or Go/Paduk/Weiqi by doing a
 1.  Exhaustively studying all the great games played by past masters
 2.  Exhaustively studying rules, strategies or tactics
 
-What they actually do is learn enough to start playing the first game, then playing and learning as they go along.  During early game play, humans do not:
+What they actually do is learn enough to start playing the first game, then they play and learn as they go along.  During early game play, humans do not:
 
 1.  Start a game with a proven strategy in mind (e.g. Sicilian Defense, Ruy Lopez, etc.)
 2.  Conduct an exhaustive, breadth first search of all possible moves (note even in Tic Tac Toe, there are 9! or 362,880 possible moves)
@@ -61,12 +61,12 @@ When training the agents, running both agents in Best mode means they tend to fi
 
 After each move made by the agent, probabilities of win/lose/draw are calculated for the game state as it exists at the completion of that move.
 
-Each game record is saved in a game history file (see 'game history' below), assuming that the game is unique, i.e. is not a duplicate of a game that has been played before.  Note that 'uniqueness' is evaluated against a transposition algorithm that considers all rotations and reflections of a given game state (see also 'Transposition' below).  The game data stored is:
+Each game record is saved in a game history file (see 'game history' below), assuming that the game is not a duplicate of a game that has been played before.  Note that 'uniqueness' is evaluated against a transposition algorithm that considers all rotations and reflections of a given game state (see also 'Transposition' below).  The game data stored is:
 - Result - X win, O win, Draw
 - Game - a list of the moves made
 - Probs - a list of the outcome probabilities for each corresponding move from the perspective of the agent (X/O) that made the move (P(win), P(loss), P(draw))
 
-If the game doesn't require human intervention, there is the option to report progress on the game loop run to the terminal along with an estimate of time remaining in the game loop.  This is currently set to every 10% of the game loop, but that is a variable.
+If the game doesn't require human intervention, there is the option to report progress on the game loop run to the terminal along with an estimate of time remaining in the game loop.  This is currently set to every 10% of the game limit, but that is a variable.
 
 At the end of the game loop execution, the following data is output to the terminal:
 - Score data (X wins, O wins, Draws)
@@ -84,18 +84,18 @@ The game history is handled by the TTTBase class.  Each game record (see above) 
 Per above on the goal of the project to mimic human learning, therefore the algorithm is as follows:
 
 1.  Assess the board for potential wins (two moves in a vector with an open space): if one exists, make that play to take the win.
-2.  Assess the board for impending losses (two opponent's moves in a vector with an open space): if one exists, take it to prevent the loss.
+2.  Assess the board for impending losses (two opponent's moves in a vector with an open space): if one exists, take the cell to prevent the loss.
 3.  Assess the board for recognizable patterns, based on memory of past games.  Optimize move selection as follows:
     -   Choose the move most likely to win (probability estimate).  If there are several moves with equal weight, choose the move least likely to lose.
     -   If losing seems more likely, chose the move most likely to draw.
 4.  Record the expectation of a win / loss / draw for that move by *estimating* the probability of each (see Calculating Probability below)
-5.  At the end of the game, store the recollection of that game.
+5.  At the end of the game, store the record of that game.
 6.  For each of the outcomes (win/loss/draw) adjust the probabilities (expectation) of those results for all relevant stored games.  This is done for the each of the patterns followed, up to the point that the game deviated from the pattern.  The degree of upgrade/downgrade is a variable that will be tuned to produce an optimal result.
 
 
 ## Ultimate goal:
 
-Implement the concept of 'hindsight experience replay' which allows the software to learn by storing and updating its base of experience based on new experience.  This (IMHO) seems to match the human process of learning and is more sophisticated than merely having a search tree (the traditional approach) or a database of optimal moves (calculated algoritmically) for every game state.  This would be one approach to achieving the ultimate goal.  The other, of course, is neural networks.  That may be tackled later.
+Implement the concept of 'hindsight experience replay' which allows the software to learn by storing and updating its base of experience based on new experience.  This (IMHO) seems to match the human process of learning and is more sophisticated than merely having a search tree (the traditional approach) or a database of optimal moves (calculated algorithmically) for every game state.  This would be one approach to achieving the ultimate goal.  The other, of course, is neural networks.  That may be tackled later.
 
 ## Current status: 
 

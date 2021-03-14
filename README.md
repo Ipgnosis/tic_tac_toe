@@ -3,7 +3,7 @@ This is a work in progress.
 
 ## Goal: 
 
-To explore how a software process can learn how to resolve a problem space from first principles. This was inspired by [Google's AlphaZero](https://deepmind.com/blog/article/alphazero-shedding-new-light-grand-games-chess-shogi-and-go).  However, AlphaZero's learning process is opaque, and this doesn't expand **my** knowlege of how software can learn the problem space.  This project iterates towards a process by which a human * */(specifically me/)* * can understand the computer learning process.
+To explore how a software process can learn how to resolve a problem space from first principles. This was inspired by [Google's AlphaZero](https://deepmind.com/blog/article/alphazero-shedding-new-light-grand-games-chess-shogi-and-go).  However, AlphaZero's learning process is opaque, and this doesn't expand **my** knowlege of how software can learn the problem space.  This project iterates towards a process by which a human can understand the computer learning process.
 
 ### Sidebar:
 

@@ -2,6 +2,7 @@
 # written by Russell on 4/9/20
 # modified on 5/4/20 to include matplotlib results
 # modified on 5/5/20 to create the game_record dictionary
+# modified on 3/10/21 to start to integrate TTTProbs into algorithm
 
 from typing import TypedDict
 from libs.plot_results import results_plot

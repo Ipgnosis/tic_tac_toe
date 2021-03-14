@@ -81,7 +81,16 @@ The game history is handled by the TTTBase class.  Each game record (see above) 
 
 Best Move Algorithm:
 
-This is a work in progress.
+Per above on the goal of the project to mimic human learning, therefore the algorithm is as follows:
+
+1.  Assess the board for potential wins (two moves in a vector with an open space): if one exists, make that play to take the win.
+2.  Assess the board for impending losses (two opponent's moves in a vector with an open space): if one exists, take it to prevent the loss.
+3.  Assess the board for recognizable patterns, based on memory of past games.  Optimize move selection as follows:
+-   Choose the move most likely to win.  If there are several moves with equal weight, choose the move least likely to lose.
+-   If losing seems more likely, chose the move most likely to draw.
+4.  Record the expectation of a win / loss / draw for that move by estimating the probability of each.
+5.  At the end of the game, store the recollection of that game.
+6.  For each of the outcomes (win/loss/draw) adjust the probabilities (expectation) of those results for all relevant stored games.  This is done for the each of the patterns followed, up to the point that the game deviated from the pattern.  The degree of upgrade/downgrade is a variable that will be tuned to produce an optimal result.
 
 
 Ultimate goal:

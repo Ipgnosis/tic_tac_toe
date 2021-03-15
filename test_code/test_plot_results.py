@@ -1,4 +1,4 @@
-import plot_results
+from tic_tac.toe.libs.plot_results import results_plot
 
 agentx_x_axis = [1, 2, 3, 4, 5]
 agentx_y_axis = [0, 1, 2, 2, 2]
@@ -12,4 +12,4 @@ result_set = [agentx_x_axis, agentx_y_axis, agento_x_axis,
 
 plot_title = "this chart"
 
-plot_results.results_plot(plot_title, result_set)
+results_plot(plot_title, result_set)

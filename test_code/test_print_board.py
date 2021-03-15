@@ -2,13 +2,11 @@
 # invoke the rotate and reflect functions from the transpose.py file
 
 
+from tic_tac_toe.libs.transpose import rotate90, rotate180, rotate270, reflect_diagonal_left, reflect_diagonal_right, reflect_horizontal, reflect_vertical
+from tic_tac_toe.libs.print_board import tty_print
 import sys
 sys.path.append('tic_tac_toe')
 
-
-
-from print_board import tty_print
-from transpose import rotate90, rotate180, rotate270, reflect_diagonal_left, reflect_diagonal_right, reflect_horizontal, reflect_vertical
 
 example_board = ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
 string_board = [" ", " ", "X", "X", " ", "O", "O", "X", " "]

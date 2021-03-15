@@ -23,9 +23,9 @@ The goal of this project is to get the computer to learn Tic Tac Toe as a young 
 
 ## Approach: 
 
-The game 'tic tac toe' is used as an experiment to explore machine learning from a human perspective.  Although computer TTT has been implemented many times before, it was chosen because the action space is small enough to be readily understandable at first glance and the necessary compute resources can be provided by a laptop.
+The game 'tic tac toe' is used as an experiment to explore machine learning from a human perspective.  Although computer TTT has been implemented many times before, it was chosen because the action space is small enough to be readily understandable at first glance and also because the required compute resources can be provided by a laptop.
 
-The process must self-learn via competing against itself.  No human interaction or pre-programmed rules (beyond how to make a move and the definition of win/loss) are permissable.
+The process must self-learn by competing against itself.  No human guidance or pre-programmed rules (beyond how to make a move and the definition of win/loss) are permissable.
 
 By convention:
 - Agent 'X' always makes the first move
@@ -41,9 +41,9 @@ These results are the average of 3 runs of 1 million games each.  This establish
 
 ## Success metric:
 
-The metric for success is that, after training, the win rate of the trained agent exceeds:
-1.  The success rate of random play (see below)
-2.  The win rate of a reasonably adept human (i.e. consistenty beat a human)
+The metric for success is that, after training, the agent:
+1.  Significantly exceeds the success rate of random play (see above)
+2.  Can outperform a reasonably adept human
 
 For example, the 'Nought' agent ('O'), should consistently exceed the random win rate (~28.9%) against a human player playing as Agent 'X'.
 
@@ -103,12 +103,13 @@ For a given game state, the game history is searched for matching games (see als
 
 ### Error avoidance: 
 
-The vector states are searched for a win that can be achieved in the current move or a loss that could be achieved in the next (opponent) move.  If a win can be achieved, or a loss can be blocked, that move is selected.
+The vector states are searched for a win that can be achieved in the current move or a loss that could be achieved in the next (opponent) move.  If a win can be achieved, or a loss can be blocked, that move is selected. 
+
 Prior to the probability calculation code being created, the game history was filled with games containing randomly selected moves that missed easy wins or imminent losses.  This filled the training data with poor choices that were being repeated over and over.  When probability is integrated into 'best move' the game history will (hopefully) avoid storing poor training data.  See more about probability below.
 
 ### Next steps
 
-Integrate the probability calculation method (TTTProbs class) to allow the best next move (rather than the most common move) to be selected.  Once the probabilities have been integrated, training will tune the probabilities to upgrade/downgrade the base probability estimates based on training outcomes.  This will (hopefully) result in optimal performance once training is complete.
+Integrate the best move algorithm (see above) to allow the best next move (rather than the most common move) to be selected.  Once the probabilities have been integrated, training will tune the probabilities to upgrade/downgrade the base probability estimates based on training outcomes.  This will (hopefully) result in optimal performance once training is complete.
 
 
 ## Calculating probability:

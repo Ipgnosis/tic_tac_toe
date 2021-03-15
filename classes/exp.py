@@ -1,11 +1,11 @@
-
+# work in progress
 
 cell_probs = [0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 empty = get_open_cells(board)
 
 win_vectors = ((0, 1, 2), (3, 4, 5), (6, 7, 8), (6, 3, 0),
-                    (7, 4, 1), (8, 5, 2), (6, 4, 2), (8, 4, 0))
+               (7, 4, 1), (8, 5, 2), (6, 4, 2), (8, 4, 0))
 
 # each corner affects 3 vectors: 3 / 24 = 1 / 8 = 0.125...
 corner_val = 0.125

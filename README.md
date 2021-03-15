@@ -8,8 +8,8 @@ To explore how a software process can learn how to resolve a problem space from 
 ### Sidebar:
 
 Humans don't learn games such as Tic Tac Toe, Chess or Go/Paduk/Weiqi by doing any of the following:
-1.  Exhaustively studying all the great games played by past masters
-2.  Exhaustively studying rules, strategies or tactics
+1.  Exhaustively studying rules, strategies and tactics
+2.  Exhaustively studying all the great games played by past masters
 
 What they actually do is learn enough to start playing the first game, then they play and learn as they go along.  During early game play, humans do not:
 

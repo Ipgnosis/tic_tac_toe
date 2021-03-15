@@ -105,7 +105,7 @@ def best_move(this_board, agent, ttt_base):
         bounds_list.append(bounds_tuple)
         #print("best_move: bounds_tuple =", bounds_tuple)
 
-    # fetch the list of candidate winning games from the game history
+    # fetch the list of candidate WINNING games from the game history
     candidate_games = ttt_base.get_games_list(bounds_list)
 
     #print("best_move: candidate_games =", candidate_games)

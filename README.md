@@ -164,7 +164,7 @@ The transpositions are as follows:
 - Rotate 90 degrees right (see above)
 - Rotate 180 degrees
 - Rotate 270 degrees right (90 degrees left)
-- Reflect vertical (flip on the horizonal axis)
-- Reflect horizonal (flip on the vertial axis)
+- Reflect vertical (flip on the horizontal axis)
+- Reflect horizonal (flip on the vertical axis)
 - Reflect diagonal left to right (flip on the diagonal axis, top left corner to bottom right corner)
 - Reflect diagonal right to left (flip on the diagonal axis, top right corner to bottom left corner) 

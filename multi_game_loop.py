@@ -5,7 +5,7 @@
 # modified on 3/10/21 to start to integrate TTTProbs into algorithm
 
 from typing import TypedDict
-from tic_tac_toe.libs.plot_results import results_plot
+from libs.plot_results import results_plot
 from libs.print_board import tty_print
 from libs.compare import duplicate_game
 from libs.move_utils import next_player

@@ -3,7 +3,7 @@ This is a work in progress.
 
 ## Goal: 
 
-To explore how a software process can learn how to resolve a problem space from first principles. This was inspired by [Google's AlphaZero](https://deepmind.com/blog/article/alphazero-shedding-new-light-grand-games-chess-shogi-and-go).  However, AlphaZero's learning process is opaque, and this doesn't expand **my** knowlege of how software can learn the problem space.  This project iterates towards a process by which a human can understand the computer learning process.
+To explore how a software process can learn how to resolve a problem space from first principles. This was inspired by [Google's AlphaZero](https://deepmind.com/blog/article/alphazero-shedding-new-light-grand-games-chess-shogi-and-go).  However, AlphaZero's learning process is opaque, and this doesn't expand **my** knowlege of how software can learn the problem space.  This project is a process through which a human can understand the way that computers learn from first principles.
 
 ### Sidebar:
 
@@ -18,7 +18,7 @@ What they actually do is learn enough to start playing the first game, then they
 3.  Calculate win/loss probabilities for any given move
 4.  Explore the history of great games played in the past, looking for similarities
   
-The goal of this project is to get the computer to learn Tic Tac Toe as a young human learns: starting with just enough information to play and then learn by experience of play; basing their decisions on their memory of what worked or didn't work in the past.
+The goal of this project is to get the computer to learn Tic Tac Toe as a child learns: starting with just enough information to play and then learning by experience of play, basing their decisions on their recollection of what worked or didn't work in the past.
 
 
 ## Approach: 

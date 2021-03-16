@@ -1,6 +1,7 @@
 # initial game loop
 # written by Russell on 4/9/20
 # rewritten by Russell on 5/6/20 for new game data structure
+# bug fix on 3/16/21, added param to agent_x/o
 
 from libs.game_over import win_loss
 from libs.move_utils import next_player
@@ -10,15 +11,15 @@ from typing_extensions import TypedDict
 from typing import List, Tuple
 import sys
 import os
+
 CURRENT_DIR = os.path.dirname(__file__)
 sys.path.append(CURRENT_DIR)
-
 
 print("Start the game with a blank board, with the cells numbered as follows")
 example_board = ["0", "1", "2", "3", "4", "5", "6", "7", "8"]
 tty_print(example_board)
 
-print("Each player makes a random play, with 'X' starting first...")
+print("Each player makes a play: 'X' starts first...")
 
 Game_Record = TypedDict(
     'Game_Record', {"result": str, "game": List[int]})
@@ -30,7 +31,6 @@ while not win_loss(game_record["game"]):
     next_up = next_player(game_record["game"])
 
     if next_up == "X":
-
         x_choice = agent_x(game_record["game"], None, "human")
 
         # record the move in the game
@@ -44,21 +44,14 @@ while not win_loss(game_record["game"]):
 
     tty_print(game_record["game"])
 
-result = win_loss(game_record["game"])
+game_record["result"] = win_loss(game_record["game"])[0]
 
-if result[0] == "X" or result[0] == "O":
-    print("Player " + result[0] + " wins!")
-
-    # flip the result value to the game winner (defaults to 'D')
-    game_record["result"] = result[0]
-
-else:
+if game_record["result"] == "D":
     print("No-one wins, it's a draw...")
+else:
+    print("Game result:", game_record["result"],
+          "wins in", win_loss(game_record["game"])[1], "moves")
 
 print("Game record =", game_record)
-
-print("Game result:", game_record["result"],
-      "wins in", len(game_record["game"]), "moves")
-print("Game moves = " + str(game_record["game"]))
 
 print("Game over, insert coin")

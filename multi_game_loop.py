@@ -27,7 +27,7 @@ sys.path.append(CURRENT_DIR)
 start_time = time.time()
 
 # set the number of games to be played
-limit = 10
+limit = 10000
 
 # set game file name
 #file_name = 'rand_best_game_record.txt'
@@ -37,7 +37,7 @@ FILE_NAME = 'test_new_file4.txt'
 report_interval_percent = 0.1
 report_frequency = limit * report_interval_percent
 # this assignment can be commented out and is just a switch to disable reporting
-report_frequency = False
+#report_frequency = False
 
 # mode_flip allows both agents to be trained in a balanced way when a game history is being created
 # if mode flip is disabled, one agent will never get trained because it is being overwhelmed by the other
@@ -201,7 +201,7 @@ for game_count in range(1, limit + 1):
     game_record["result"] = result[0]
 
     # take a peek at the game record - comment this out?
-    print("game_record =", game_record)
+    #print("game_record =", game_record)
 
     # output the result in non-automated games
     if mode_x == "human" or mode_o == "human":
@@ -241,7 +241,7 @@ for game_count in range(1, limit + 1):
             game_duration = elapsed / game_count
             etc = round(game_duration * limit)
             time_left = round((limit - game_count) * game_duration)
-            print("Game: {}...Estimated completion time = {} seconds; time left = {} seconds.".format(
+            print("Game: {}...Estimated total completion time = {} seconds; time left = {} seconds.".format(
                 game_count, etc, time_left))
 
 ### end of game loop ###

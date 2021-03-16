@@ -103,9 +103,9 @@ For a given game state, the game history is searched for matching games (see als
 
 ### Error avoidance: 
 
-The vector states are searched for a win that can be achieved in the current move or a loss that could be achieved in the next (opponent) move.  If a win can be achieved, or a loss can be blocked, that move is selected. While this is what young humans inevitably do, this mechanism arguably violates the 'no pre-programmed rules' principle.  See Next Steps below.
+Prior to the probability calculation code being created, the game history was filled with games containing randomly selected moves that missed easy wins or imminent losses.  This filled the training data with poor choices that were being repeated over and over.  To temporarily rectify this, the vector states are searched for a win that can be achieved in the current move or a loss that could be achieved in the next (opponent) move.  If a win can be achieved, or a loss can be blocked, that move is selected. 
 
-Prior to the probability calculation code being created, the game history was filled with games containing randomly selected moves that missed easy wins or imminent losses.  This filled the training data with poor choices that were being repeated over and over.  When probability/estimation is integrated into 'best move', the game history will (hopefully) not contain poor training data.  See more in 'Calculating Probability' below.
+While this is what young humans inevitably do, this mechanism arguably violates the 'no pre-programmed rules' principle.  When probability/estimation is integrated into 'best move', the game history will (hopefully) de-emphasize poor decisions.  See more in 'Calculating Probability' below.
 
 ### Next steps
 

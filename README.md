@@ -7,14 +7,14 @@ To explore how a software process can learn how to resolve a problem space from 
 
 ### Sidebar:
 
-Humans don't learn games such as Tic Tac Toe, Chess or Go/Paduk/Weiqi by doing any of the following:
+Humans don't learn games such as Tic Tac Toe, Chess or Go by doing any of the following:
 1.  Exhaustively studying rules, strategies and tactics
 2.  Exhaustively studying all the great games played by past masters
 
 What they actually do is learn enough to start playing the first game, then they play and learn as they go along.  During early game play, humans do not:
 
 1.  Start a game with a proven strategy in mind (e.g. Sicilian Defense, Ruy Lopez, etc.)
-2.  Conduct an exhaustive, breadth first search of all possible moves (note even in Tic Tac Toe, there are 9! or 362,880 possible moves)
+2.  Conduct an exhaustive, breadth first search of all possible moves (N.B. even in Tic Tac Toe, there are 9! or 362,880 possible moves)
 3.  Calculate win/loss probabilities for any given move
 4.  Explore the history of great games played in the past, looking for similarities
   
@@ -54,14 +54,14 @@ The game loop (multi_game_loop.py) executes a series of games defined by a game 
 
 The game loop can be run in 3 different modes for each of the 2 agents (X/O):
 - Random - the agent randomly selects a move from the available spaces (see also 'Error avoidance' below)
-- Best - the agent selects the best move from available choices based on an algorithm (see also 'Best move algorithm' below)
+- Best - the agent selects the best move from available choices based on an algorithm (see also 'Best Move Algorithm' below)
 - Human - the agent delegates the play selection to a human interlocutor.
 
 When training the agents, running both agents in Best mode means they tend to fixate on a small number of game states, rather than exploring the larger action space.  So it is (currently) better to run in Best-Random mode: which forces the Best agent to have to react to the full range of plays from the Random agent.  However, this creates a problem because one agent gets trained and then when you flip the modes, the other agent is dominated by the first and can't find a way to win.  Therefore enabling 'flip_mode' allows the agents to alternate between Best and Random and thereby gain experience and explore the action space in parallel.
 
 After each move made by the agent, probabilities of win/lose/draw are calculated for the game state as it exists at the completion of that move.
 
-Each game record is saved in a game history file (see 'game history' below), assuming that the game is not a duplicate of a game that has been played before.  Note that 'uniqueness' is evaluated against a transposition algorithm that considers all rotations and reflections of a given game state (see also 'Transposition' below).  The game data stored is:
+Each game record is saved in a game history file (see 'Game History' below), assuming that the game is not a duplicate of a game that has been played before.  Note that 'uniqueness' is evaluated against a transposition algorithm that considers all rotations and reflections of a given game state (see also 'Transposition' below).  The game data stored is:
 - Result - X win, O win, Draw
 - Game - a list of the moves made
 - Probs - a list of the outcome probabilities for each corresponding move from the perspective of the agent (X/O) that made the move (P(win), P(loss), P(draw))
@@ -88,28 +88,28 @@ Per above on the goal of the project to mimic human learning, therefore the algo
 3.  Assess the board for recognizable patterns, based on memory of past games.  Optimize move selection as follows:
     -   Choose the move most likely to win (probability estimate).  If there are several moves with equal weight, choose the move least likely to lose.
     -   If losing seems more likely, chose the move most likely to draw.
-4.  Record the expectation of a win / loss / draw for that move by *estimating* the probability of each (see Calculating Probability below)
+4.  Record the expectation of a win / loss / draw for that move by *estimating* the probability of each (see 'Calculating Probability' below)
 5.  At the end of the game, store the record of that game.
 6.  For each of the outcomes (win/loss/draw) adjust the probabilities (expectation) of those results for all relevant stored games.  This is done for the each of the patterns followed, up to the point that the game deviated from the pattern.  The degree of upgrade/downgrade is a variable that will be tuned to produce an optimal result.
 
 
 ## Ultimate goal:
 
-Implement the concept of 'hindsight experience replay' which allows the software to learn by storing and updating its base of experience based on new experience.  This (IMHO) seems to match the human process of learning and is more sophisticated than merely having a search tree (the traditional approach) or a database of optimal moves (calculated algorithmically) for every game state.  This would be one approach to achieving the ultimate goal.  The other, of course, is neural networks.  That may be tackled later.
+Implement the concept of 'hindsight experience replay' which allows the software to learn by storing and updating its base of experience modfied by new experience.  This (IMHO) seems to match the human process of learning and is more sophisticated than merely having a search tree or a database of optimal moves for every game state.  This would be one approach to achieving the ultimate goal.  The other, of course, is neural networks.  That may be tackled later.
 
 ## Current status: 
 
-For a given game state, the game history is searched for matching games (see also 'Transposition' below).  If no matches are found, the next move is random: this is to ensure that the algorithm explores the solution space (i.e. tries everything that hasn't been tried, such that new moves can be explored).  If matches are found, then the most common next move is selected.  The rationale for 'most common' being selected is that this is the move which improves the chance of winning.  However, per above, the combination of questionable game data and the lack of a probabilities function means that this algorithm is weak and often results in the same poor move being made over and over again (thus the error avoidance kluge).
+For a given game state, the game history is searched for matching games (see also 'Transposition' below).  If no matches are found, the next move is random: this is to ensure that the algorithm explores the solution space (i.e. tries everything that hasn't been tried, such that new moves can be explored).  If matches are found, then the most common next move is selected.  The rationale for 'most common' being selected is that this is the move which improves the chance of winning.  However, per above, the combination of questionable game data and the lack of a probabilities function means that this algorithm is weak and often results in the same poor move being made over and over again.
 
 ### Error avoidance: 
 
-The vector states are searched for a win that can be achieved in the current move or a loss that could be achieved in the next (opponent) move.  If a win can be achieved, or a loss can be blocked, that move is selected. 
+The vector states are searched for a win that can be achieved in the current move or a loss that could be achieved in the next (opponent) move.  If a win can be achieved, or a loss can be blocked, that move is selected. While this is what young humans inevitably do, this mechanism arguably violates the 'no pre-programmed rules' principle.  See Next Steps below.
 
-Prior to the probability calculation code being created, the game history was filled with games containing randomly selected moves that missed easy wins or imminent losses.  This filled the training data with poor choices that were being repeated over and over.  When probability is integrated into 'best move' the game history will (hopefully) avoid storing poor training data.  See more about probability below.
+Prior to the probability calculation code being created, the game history was filled with games containing randomly selected moves that missed easy wins or imminent losses.  This filled the training data with poor choices that were being repeated over and over.  When probability/estimation is integrated into 'best move', the game history will (hopefully) not contain poor training data.  See more in 'Calculating Probability' below.
 
 ### Next steps
 
-Integrate the best move algorithm (see above) to allow the best next move (rather than the most common move) to be selected.  Once the probabilities have been integrated, training will tune the probabilities to upgrade/downgrade the base probability estimates based on training outcomes.  This will (hopefully) result in optimal performance once training is complete.
+Integrate the best move algorithm (see above) to allow the best next move (rather than the most common move) to be selected.  Once the probabilities have been integrated, training will tune the probabilities to upgrade/downgrade the base probability estimates based on training outcomes.  This will (hopefully) result in optimal performance once training is complete and this may allow the 'error avoidance' function to be removed.
 
 
 ## Calculating probability:
